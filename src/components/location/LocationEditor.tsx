@@ -83,7 +83,6 @@ const validationSchema = Yup.object().shape({
 
 type LocationEditorPropType = {
     address: PersonAddress;
-    personId: number;
     onClose: (refreshRequired: boolean) => any;
     open: boolean;
 }
@@ -100,6 +99,7 @@ export default function LocationEditor(props: LocationEditorPropType) {
     const [alertMessage, setAlertMessage] = React.useState<string>("");
     const [alertSeverity, setAlertSeverity] = React.useState<any>("success");
     const [addressTypes, setAddressTypes] = React.useState<AddressType[]>([]);
+    const [newItem, setNewItem] = React.useState<boolean>(true);
 
 
     const saveButtonRef: React.RefObject<HTMLButtonElement> = React.createRef();
@@ -128,7 +128,7 @@ export default function LocationEditor(props: LocationEditorPropType) {
     };
 
     const onLocationSelectionChanged = async (city: City): Promise<LocationResponse> => {
-        return await new Client().getLocationByCityId(city.id);
+        return await new Client().getLocationByCityId(city.id!);
     }
 
 
@@ -203,23 +203,24 @@ export default function LocationEditor(props: LocationEditorPropType) {
             //.values.type = personAddress.type;
 
             setSubmitting(true);
-            let responseInfo: Response<number>;
+            let responseInfo: Response<string>;
 
-            if (values.id !== 0) {
-                responseInfo = await updateLocation(values) as Response<number>;
+            if (!newItem) {
+                responseInfo = await updateLocation(values) as Response<string>;
             }
             else {
-                responseInfo = await addLocation(values) as Response<number>;
+                responseInfo = await addLocation(values) as Response<string>;
             }
 
             if (responseInfo.status === "success") {
 
 
 
-                if (values.id === 0) {
+                if (newItem) {
                     values.id = responseInfo.data!;
                 }
 
+                setNewItem(false);
                 setDataChanged(true);
 
                 resetForm({ values });
@@ -349,7 +350,7 @@ export default function LocationEditor(props: LocationEditorPropType) {
                                                         defaultValue=""
                                                     >
                                                         {addressTypes.map((item, index) => {
-                                                            return (<MenuItem key={item.id} value={item.id} >{item.name}</MenuItem>)
+                                                            return (<MenuItem key={item.id.toString()} value={item.id.toString()} >{item.name}</MenuItem>)
                                                         })}
                                                     </Select>
 

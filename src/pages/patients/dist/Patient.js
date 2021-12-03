@@ -227,7 +227,12 @@ var ParentChildForm = /** @class */ (function (_super) {
                             cellPhone: "",
                             homePhone: "",
                             gender: this.state.genders[0],
-                            active: true
+                            active: true,
+                            role: new DiaRegApi_1.PersonRole(),
+                            auditInfo: new DiaRegApi_1.AuditInfo(),
+                            roles: Array(),
+                            addresses: Array(),
+                            displayName: ""
                         });
                         this.setState({ patient: newPatient });
                         return [2 /*return*/];

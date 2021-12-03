@@ -193,7 +193,7 @@ function VisitEditor(props) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, new DiaRegApi_1.DiaRegWebApiClient().getVisitTypes()];
+                    case 0: return [4 /*yield*/, new DiaRegApi_1.DiaRegWebApiClient().getAppointmentTypes()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -202,12 +202,12 @@ function VisitEditor(props) {
     function createNewVisit() {
         var newVisit = new DiaRegApi_1.Visit();
         newVisit.id = 0;
-        newVisit.visitDate = new Date();
+        newVisit.appointmentDate = new Date();
         newVisit.patientId = props.patientId;
         newVisit.lastFluShotDate = null;
         newVisit.lastPneumoShotDate = null;
-        newVisit.visitType = new DiaRegApi_1.VisitType();
-        newVisit.visitTypeId = 0;
+        newVisit.appointmentType = new DiaRegApi_1.AppointmentType();
+        newVisit.appointmentTypeId = 0;
         newVisit.smokes = false;
         newVisit.smokesPacksPerDay = 0;
         newVisit.drinksAlcohol = false;
@@ -321,21 +321,21 @@ function VisitEditor(props) {
                                         react_1["default"].createElement(core_1.Grid, { container: true, spacing: 4 },
                                             react_1["default"].createElement(core_1.Grid, { item: true, md: 4 },
                                                 react_1["default"].createElement(lab_1.Autocomplete, { autoHighlight: true, id: "visitType", options: visitTypes, getOptionLabel: function (visitType) { return visitType === null || visitType === void 0 ? void 0 : visitType.name; }, getOptionSelected: function (option, value) { return option.id === value.id; }, includeInputInList: true, disableClearable: true, onOpen: handleBlur("visitTypeField"), autoComplete: false, onChange: function (event, newValue) {
-                                                        values.visitType = newValue;
-                                                        values.visitTypeId = newValue.id;
+                                                        values.appointmentType = newValue;
+                                                        values.appointmentTypeId = newValue.id;
                                                         setVisit(values);
                                                         handleChange("visitType");
                                                         setManualDirty(true);
                                                     }, onInputChange: function (event, newInputValue) {
                                                         setVisitTypeName(newInputValue);
-                                                    }, inputValue: visitTypeName, value: visit.visitType, renderInput: function (params) { return react_1["default"].createElement(TextField, __assign({ required: true }, params, { label: "Purpose of Visit", error: Boolean(touched.visitType && errors.visitType), fullWidth: true, helperText: touched.visitType && errors.visitType, name: "visitTypeField", variant: "outlined" })); } }))),
+                                                    }, inputValue: visitTypeName, value: visit.appointmentType, renderInput: function (params) { return react_1["default"].createElement(TextField, __assign({ required: true }, params, { label: "Purpose of Visit", error: Boolean(touched.appointmentType && errors.appointmentType), fullWidth: true, helperText: touched.appointmentType && errors.appointmentType, name: "visitTypeField", variant: "outlined" })); } }))),
                                         react_1["default"].createElement(pickers_1.MuiPickersUtilsProvider, { utils: date_fns_1["default"] },
                                             react_1["default"].createElement(core_1.Grid, { container: true, spacing: 4 },
                                                 react_1["default"].createElement(core_1.Grid, { item: true, md: 4 },
-                                                    react_1["default"].createElement(pickers_1.KeyboardDatePicker, { disableFuture: true, id: "visitDate", required: true, variant: "inline", inputVariant: "outlined", label: "Date of Visit", format: "MM/dd/yyyy", value: values.visitDate, InputAdornmentProps: { position: "start" }, onChange: function (date) {
-                                                            values.visitDate = date;
+                                                    react_1["default"].createElement(pickers_1.KeyboardDatePicker, { disableFuture: true, id: "visitDate", required: true, variant: "inline", inputVariant: "outlined", label: "Date of Visit", format: "MM/dd/yyyy", value: values.appointmentDate, InputAdornmentProps: { position: "start" }, onChange: function (date) {
+                                                            values.appointmentDate = date;
                                                             setVisit(values);
-                                                        }, maxDate: new Date(), error: Boolean(touched.visitDate && errors.visitDate), onBlur: handleBlur, helperText: errors.visitDate && touched.visitDate })),
+                                                        }, maxDate: new Date(), error: Boolean(touched.appointmentDate && errors.appointmentDate), onBlur: handleBlur, helperText: errors.appointmentDate && touched.appointmentDate })),
                                                 react_1["default"].createElement(core_1.Grid, { item: true, md: 4 },
                                                     react_1["default"].createElement(pickers_1.KeyboardDatePicker, { autoOk: true, variant: "inline", inputVariant: "outlined", label: "Last Flu Shot Date", format: "MM/dd/yyyy", value: values.lastFluShotDate || null, InputAdornmentProps: { position: "start" }, onChange: function (date) { if (date != null)
                                                             values.lastFluShotDate = date; }, maxDate: new Date() })),

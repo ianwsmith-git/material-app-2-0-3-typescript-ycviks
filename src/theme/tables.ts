@@ -1,7 +1,7 @@
-import { Table, TableCell, TableHead, TableRow, Theme } from "@material-ui/core";
-import { withStyles } from "@material-ui/styles";
+import { Table, TableCell, TableRow, Theme } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-export const StyledTable = withStyles((theme : Theme) => ({
+export const StyledTable = withStyles((theme: Theme) => ({
 
 }))(Table);
 
@@ -18,7 +18,7 @@ export const StyledTableCell = withStyles((theme: Theme) => ({
 
 
 
-export const StyledTableRow = withStyles((theme : Theme) => ({
+export const StyledTableRow = withStyles((theme: Theme) => ({
     root: {
         padding: "none",
         '&:nth-of-type(odd)': {

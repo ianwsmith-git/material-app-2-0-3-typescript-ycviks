@@ -99,7 +99,7 @@ function SurveysTable(props: SurveysTablePropsType & StyledComponentProps) {
         setOpenSurvey(false);
     }
 
-    function onCompleteSurvey(data : any) {
+    function onCompleteSurvey(data: any) {
         setCompleteSurvey(true);
         onSave(data);
     }
@@ -121,7 +121,7 @@ function SurveysTable(props: SurveysTablePropsType & StyledComponentProps) {
             await getSurveys(props.patientId).then((response: PatientSurveyPagedResponse) => {
                 const newRows = response.data?.map((patientSurvey) => {
                     return {
-                        id: patientSurvey.patientSurveyId,
+                        id: 0, // patientSurvey.patientSurveyId,
                         name: patientSurvey.surveyName,
                         dateAssigned: new Date(moment.utc(patientSurvey.dateAssigned).format("MM/DD/YYYY")),
                         dateCompleted: new Date(moment.utc(patientSurvey.completedDate).format("MM/DD/YYYY")),

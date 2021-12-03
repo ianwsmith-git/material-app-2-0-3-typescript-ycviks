@@ -75,8 +75,8 @@ function ContactsTable(props: ContactsTablePropsType & StyledComponentProps) {
 
     function onDataChange(dataChanged: boolean) {
         if (dataChanged) {
-            
-            setCount(count => count+1);
+
+            setCount(count => count + 1);
         }
     }
 
@@ -115,7 +115,8 @@ function ContactsTable(props: ContactsTablePropsType & StyledComponentProps) {
                 </Grid>
                 <Grid item>
 
-                    <ContactDialog contactId={0} patientId={props.patientId} parentAlertHandler={showAlert} onClose={onDataChange} />
+                    // TODO Fix this
+                    {/* <ContactDialog contactId={0} patientId={props.patientId} parentAlertHandler={showAlert} onClose={onDataChange} /> */}
 
                 </Grid>
             </Grid>
@@ -159,9 +160,10 @@ function ContactsTable(props: ContactsTablePropsType & StyledComponentProps) {
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
-                            <StyledTableRow key={row.id}>
+                            <StyledTableRow key={row.id!} >
                                 <StyledTableCell align="left">
-                                    <ContactDialog contactId={row.id!} patientId={props.patientId} parentAlertHandler={showAlert} onClose={onDataChange} />
+                                    // TODO Fix this.
+                                    {/* <ContactDialog contactId={row.id!} patientId={props.patientId} parentAlertHandler={showAlert} onClose={onDataChange} /> */}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">{row.lastName}</StyledTableCell>
                                 <StyledTableCell align="left">{row.firstName}</StyledTableCell>
@@ -173,7 +175,7 @@ function ContactsTable(props: ContactsTablePropsType & StyledComponentProps) {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 

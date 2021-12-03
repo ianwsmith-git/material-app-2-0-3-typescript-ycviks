@@ -7,7 +7,7 @@ import styled from 'styled-components/macro';
 
 import { AddressType, City, PersonAddress, PersonAddressListResponse, Region } from '../../api/DiaRegApi';
 import BasicTable, { Column } from '../Tables/BasicTable';
-import { DiaRegWebApiClient as Client, Location, PersonAddressResponse, Response } from './../../api/DiaRegApi';
+import { AuditInfo, DiaRegWebApiClient as Client, Location, PersonAddressResponse, Response } from './../../api/DiaRegApi';
 import shadows from './../../theme/shadows';
 import LocationEditor from './LocationEditor';
 
@@ -35,34 +35,22 @@ const useStyles = makeStyles((theme: Theme) =>
     }
 ));
 
-function createNewPersonAddress(personId: number): PersonAddress {
-    let newPersonAddress = new PersonAddress();
-    newPersonAddress.active = true;
-    newPersonAddress.location = new Location();
-    newPersonAddress.location.city = new City({ id: 0, name: "", active: true, regionId: 0 })
-    newPersonAddress.location.region = new Region({ id: 0, name: "", active: true, countryId: 0 })
-    newPersonAddress.personId = personId;
-    newPersonAddress.id = 0;
-    newPersonAddress.type = new AddressType();
-    newPersonAddress.type.id = 0;
-    return newPersonAddress
-}
-
 type LocationsEditorPropsType = {
-    personId: number
+    personId: string
 }
 export default function Locations(props: LocationsEditorPropsType) {
     const [showingEditor, setShowingEditor] = React.useState(false);
     const [showEditor, setShowEditor] = React.useState(false);
     const [selectedAddress, setSelectedAddress] = React.useState<PersonAddress>(new PersonAddress());
     const [addresses, setAddresses] = React.useState<Array<PersonAddress>>(new Array<PersonAddress>());
-    const [selectedAddressId, setSelectedAddressId] = React.useState<number>(0);
+    const [selectedAddressId, setSelectedAddressId] = React.useState<string>();
     const [openAlert, setOpenAlert] = React.useState<boolean>(false);
     const [alertMessage, setAlertMessage] = React.useState<string>("");
     const [alertSeverity, setAlertSeverity] = React.useState<any>("success");
     const [loading, setLoading] = React.useState<boolean>(true);
     const [deleting, setDeleting] = React.useState<boolean>(false);
     const [count, setCount] = React.useState<number>(0);
+    const [newItem, setNewItem] = React.useState<boolean>(true);
 
     const classes = useStyles();
 
@@ -81,29 +69,37 @@ export default function Locations(props: LocationsEditorPropsType) {
 
         if (showingEditor) {
 
-            if (selectedAddressId != 0) {
+            var addressResponse: PersonAddressResponse = new PersonAddressResponse();
+
+            if (!newItem) {
                 (async () => {
-                    await getAddress(selectedAddressId).then((value: PersonAddressResponse) => {
-                        if (value.status == "success") {
-                            let data = value.data!;
-                            setSelectedAddress(data);
-                            setShowEditor(true);
-                        }
-                        else {
-                            showAlert(value.status, value.message!);
-                        }
+                    await getAddress(selectedAddressId!).then((value: PersonAddressResponse) => {
+                        addressResponse = value;
                     }
                     ).catch((error) => {
                         showAlert("error", "An expected error has occurred: " + error.message!);
                     });
-
-
-
-
+                })();
+            }
+            else {
+                (async () => {
+                    await CreateNewAddress(props.personId!).then((value: PersonAddressResponse) => {
+                        addressResponse = value;
+                    }
+                    ).catch((error) => {
+                        showAlert("error", "An expected error has occurred: " + error.message!);
+                    });
                 })();
             }
 
-
+            if (addressResponse.status == "success") {
+                let data = addressResponse.data!;
+                setSelectedAddress(data);
+                setShowEditor(true);
+            }
+            else {
+                showAlert(addressResponse.status, addressResponse.message!);
+            }
             setShowingEditor(false);
         }
 
@@ -148,7 +144,7 @@ export default function Locations(props: LocationsEditorPropsType) {
         if (deleting) {
             (async () => {
 
-                await deleteAddress(selectedAddressId).then((value: Response) => {
+                await deleteAddress(selectedAddressId!).then((value: Response) => {
                     if (value.status == "success") {
                         setLoading(true);
                     }
@@ -170,20 +166,25 @@ export default function Locations(props: LocationsEditorPropsType) {
         };
     }, [deleting]);
 
-    async function getAddress(id: number) {
-        return await new Client().getDoctorLocation(id);
+
+    async function CreateNewAddress(personId: string) {
+        return await new Client().createNewDoctorLocation(personId);
     }
 
-    async function getAddresses(id: number) {
-        return await new Client().getDoctorLocations(id);
+    async function getAddress(addressId: string) {
+        return await new Client().getDoctorLocation(addressId);
     }
 
-    async function deleteAddress(id: number) {
-        return await new Client().deleteDoctorLocation(id);
+    async function getAddresses(personId: string) {
+        return await new Client().getDoctorLocations(personId);
+    }
+
+    async function deleteAddress(addressId: string) {
+        return await new Client().deleteDoctorLocation(addressId);
     }
 
     function onDeleteAddress(index: number) {
-        setSelectedAddressId(addresses[index].id);
+        setSelectedAddressId(addresses[index].id!);
         setDeleting(true);
     }
 
@@ -198,14 +199,14 @@ export default function Locations(props: LocationsEditorPropsType) {
         setShowEditor(true);
     }
 
-    function showNewAddress() {
-
-        var personAddress = createNewPersonAddress(props.personId);
-
-        setSelectedAddress(personAddress);
-        setShowEditor(true);
-
-    }
+    /*     function showNewAddress() {
+    
+            var personAddress = createNewPersonAddress(props.personId);
+    
+            setSelectedAddress(personAddress);
+            setShowEditor(true);
+    
+        } */
 
 
     return (
@@ -219,7 +220,7 @@ export default function Locations(props: LocationsEditorPropsType) {
                 </Grid>
                 <Grid item>
                     <div>
-                        <Button variant="contained" color="primary" onClick={() => { showNewAddress(); }}>
+                        <Button variant="contained" color="primary" onClick={() => { setShowEditor(true); }}>
                             <AddIcon />
                             New Location
                         </Button>
@@ -254,11 +255,11 @@ export default function Locations(props: LocationsEditorPropsType) {
                     </Grid>
                 </Grid>
             </ Collapse>
-            <BasicTable columns={buildColumns()} data={addresses} allowEdit={true} allowDelete={true} viewItemHandler={showAddress} deleteHandler={onDeleteAddress} />
+            <BasicTable columns={buildColumns()} data={addresses} allowEdit={true} allowDelete={true} onView={showAddress} onDelete={onDeleteAddress} />
 
             {
                 showEditor ?
-                    <LocationEditor open={showEditor} personId={props.personId} address={selectedAddress} onClose={onDataChange} />
+                    <LocationEditor open={showEditor} address={selectedAddress} onClose={onDataChange} />
                     :
                     null
             }

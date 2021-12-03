@@ -1,29 +1,23 @@
+import { DashboardOutlined } from '@material-ui/icons';
 import React from 'react';
-import { Home, Users } from 'react-feather';
+import { Calendar as CalendarIcon, Users } from 'react-feather';
 
 import async from '../components/Async';
 
 // Guards
 
 
-const Dashboard = async(() => import("../pages/index"));
+const Today = async(() => import("../pages/today"));
 const Patients = async(() => import("../pages/patients/Patients"));
 const Patient = async(() => import("../pages/patients/Patient"));
-// const Appointments = async(() => import("../pages/appointments/Appointments"));
+const AppointmentsCalendar = async(() => import("../pages/appointments/AppointmentsDashboard"));
 const LogOut = async(() => import("../pages/logout"));
 const SurveyForm = async(() => import("../pages/patients/surveys/Survey"));
 const Doctors = async(() => import('../pages/doctors/Doctors'));
 const DoctorEditor = async(() => import('../pages/doctors/DoctorEditor'));
-
-
-const dashboardRoutes = {
-  id: "",
-  path: "/",
-  header: "",
-  children: null,
-  component: Dashboard
-};
-
+const DoctorsCalendars = async(() => import('./../pages/appointments/DoctorsCalendars'));
+const PatientsAppointments = async(() => import('./../pages/appointments/PatientsAppointments'));
+const PatientAppointment = async(() => import('./../pages/appointments/PatientAppointment'));
 
 const patientRoute = {
   id: "",
@@ -85,14 +79,33 @@ const doctorRoutes = {
   component: null
 };
 
-/* const appointmentRoutes = {
-    id: "Appointments",
-    path: "/appointments",
-    header: "",
-    icon: <Calendar />,
-    children: null,
-    component: Appointments
-}; */
+const appointmentRoutes = {
+  id: "Appointments",
+  path: "/",
+  header: "",
+  icon: <CalendarIcon />,
+  children: [{
+    path: "/appointments/calendar",
+    name: "Schedule Appointments",
+    component: AppointmentsCalendar,
+  }, {
+    path: "/appointments/patients",
+    name: "Find Appointments",
+    component: PatientsAppointments,
+  },
+  {
+    path: "/appointments/newpatientappointment",
+    name: "New Appointment",
+    component: PatientAppointment,
+  },
+  {
+    path: "/appointments/patients",
+    name: "Doctors Calenddars",
+    component: DoctorsCalendars,
+  }
+  ],
+  component: null
+};
 
 const logOutRoute = {
   id: "",
@@ -102,9 +115,19 @@ const logOutRoute = {
   component: LogOut
 };
 
+const todayRoute = {
+  id: "Today",
+  path: "/",
+  header: "",
+  icon: <DashboardOutlined />,
+  children: null,
+  component: Today
+};
+
 // Routes visible in the sidebar
 export const sidebarRoutes = [
-  dashboardRoutes,
+  todayRoute,
+  appointmentRoutes,
   patientsRoutes,
   doctorRoutes,
   //appointmentRoutes,

@@ -56,7 +56,7 @@ const validationSchema = Yup.object().shape({
 });
 
 type DoctorEditorPropsType = {
-  doctorId: number;
+  doctorId: string;
 }
 
 export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPropsType) {
@@ -70,6 +70,8 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
   const [deleted, setDeleted] = React.useState(false);
   const [deleting, setDeleting] = React.useState(false);
   const [deleteReponse, setDeletedResponse] = React.useState(new Response<number>());
+  const [newItem, setNewItem] = React.useState<boolean>(true);
+
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -88,7 +90,9 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
 
 
         if (params.id != 0) {
-          await getDoctor(params.id).then((value: PersonResponse) => {
+
+          // TODO Plug in real value
+          await getDoctor(props.doctorId).then((value: PersonResponse) => {
             if (value.status == "success") {
               let data = value.data!;
               setDoctor(data);
@@ -170,7 +174,7 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
     };
   }, [deleting]);
 
-  async function getDoctor(id: number) {
+  async function getDoctor(id: string) {
     return await new Client().getDoctor(id);
   }
 
@@ -183,7 +187,7 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
   }
 
   async function deleteDoctor() {
-    return await new Client().deleteDoctor(doctor?.id);
+    return await new Client().deleteDoctor(doctor?.id!);
 
   }
 
@@ -213,17 +217,19 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
       setSubmitting(true);
       let responseInfo: Response<number>;
 
-      if (values.id !== 0) {
-        responseInfo = await updateDoctor(values) as Response<number>;
-      }
-      else {
-        responseInfo = await addDoctor(values) as Response<number>;
-      }
+      // TODO Fix this.
+      //if (values.id !== 0) {
+      responseInfo = await updateDoctor(values) as Response<number>;
+      // }
+      //  else {
+      responseInfo = await addDoctor(values) as Response<number>;
+      //   }
 
       if (responseInfo.status === "success") {
 
-        if (values.id === 0) {
-          values.id = responseInfo.data!;
+        // TODO FIx this.
+        if (true) {
+          //values.id = responseInfo.data!;
 
 
         }
@@ -478,7 +484,7 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
             <Grid item xs={12}>
               <DoctorInfo />
 
-              {doctor?.id != 0 ?
+              {!newItem ?
                 <DoctorLocations />
                 :
                 null
@@ -486,7 +492,7 @@ export default function DoctorEditor(props: RouteComponentProps & DoctorEditorPr
             </Grid>
             <Grid item xs={4}>
 
-              {doctor?.id != 0 ?
+              {!newItem ?
                 <Card mb={8} variant="outlined">
                   <CardContent>
                     <Typography variant="h6" gutterBottom>

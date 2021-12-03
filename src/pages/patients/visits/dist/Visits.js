@@ -111,8 +111,8 @@ function VisitsTable(props) {
                                 var _a;
                                 return {
                                     id: visit.id,
-                                    date: (new Date(moment_1["default"].utc(visit.visitDate).format("MM/DD/YYYY"))).toLocaleDateString(),
-                                    type: (_a = visit.visitType) === null || _a === void 0 ? void 0 : _a.name
+                                    date: (new Date(moment_1["default"].utc(visit.appointmentDate).format("MM/DD/YYYY"))).toLocaleDateString(),
+                                    type: (_a = visit.appointmentType) === null || _a === void 0 ? void 0 : _a.name
                                 };
                             });
                             if (!active) {
@@ -152,7 +152,7 @@ function VisitsTable(props) {
                             e.preventDefault();
                         } },
                         react_1["default"].createElement(icons_1.Close, { fontSize: "inherit" })) }, alertMessage))),
-        react_1["default"].createElement(BasicTable_1["default"], { columns: buildColumns(), data: rows, allowEdit: true, allowDelete: false, viewItemHandler: viewRecord }),
+        react_1["default"].createElement(BasicTable_1["default"], { columns: buildColumns(), data: rows, allowEdit: true, allowDelete: false, onView: viewRecord }),
         showEditor ?
             react_1["default"].createElement(Visit_1.VisitEditor, { open: showEditor, visitId: selectedVisitId, patientId: props.patientId, onClose: onDataChange, parentAlertHandler: function () { } })
             :

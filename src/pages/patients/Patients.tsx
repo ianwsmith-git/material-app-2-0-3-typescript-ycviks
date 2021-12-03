@@ -145,26 +145,27 @@ function Patients() {
                 await getPatients(search).then((response: PatientPagedResponse) => {
 
                     if (response.status === "success") {
-                        const newRows = response.data?.map((patient) => {
-                            return {
-                                id: patient.id,
-                                firstName: patient.firstName,
-                                lastName: patient.lastName,
-                                birthDate: patient.birthDate,
-                                emailAddress: patient.emailAddress,
-                                city: patient.location?.city?.name,
-                                region: patient.location?.region?.name,
-                                middleName: patient.middleName,
-                                address1: patient.address1,
-                                address2: patient.address2,
-                                title: patient.title,
-                                suffix: patient.suffix,
-                                cellPhone: patient.cellPhone,
-                                homePhone: patient.homePhone,
-                                gender: patient.gender?.name
-
-                            };
-                        }) as Array<PatientType>;
+                        const newRows: React.SetStateAction<PatientType[]> = [];
+                        /*     = response.data?.map((patient) => {
+                               return {
+                                   id: patient.id,
+                                   firstName: patient.firstName,
+                                   lastName: patient.lastName,
+                                   birthDate: patient.birthDate,
+                                   emailAddress: patient.emailAddress,
+                                   city: patient.location?.city?.name,
+                                   region: patient.location?.region?.name,
+                                   middleName: patient.middleName,
+                                   address1: patient.address1,
+                                   address2: patient.address2,
+                                   title: patient.title,
+                                   suffix: patient.suffix,
+                                   cellPhone: patient.cellPhone,
+                                   homePhone: patient.homePhone,
+                                   gender: patient.gender?.name
+   
+                               };
+                           }) as Array<PatientType>; */
 
                         if (!active) {
                             return;
@@ -215,7 +216,7 @@ function Patients() {
                 </Alert>
             </Collapse>
             <ListPage title="Patients" data={rows} columns={columns} allowDelete={false} allowEdit={true} rowCount={rowCount} allowPaging={true} pagingHandler={handlePageChange} filterHander={handleFilter}
-                viewItemHandler={handleView} />
+                onView={handleView} />
 
         </React.Fragment>
     );

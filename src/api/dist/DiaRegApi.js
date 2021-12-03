@@ -57,7 +57,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.ApiException = exports.WeatherForecast = exports.VisitTypeArrayResponse = exports.VisitType = exports.VisitResponse = exports.VisitPagedResponse = exports.Visit = exports.StringStringKeyValuePairListResponse = exports.StringStringKeyValuePair = exports.StringResponse = exports.Response = exports.RegionArrayResponse = exports.Region = exports.PhoneNumberType = exports.PhoneNumberListResponse = exports.PhoneNumber = exports.PersonRole = exports.PersonResponse = exports.PersonPagedResponse = exports.PersonAddressResponse = exports.PersonAddressListResponse = exports.PersonAddress = exports.Person = exports.PatientSurveyStatus = exports.PatientSurveyPagedResponse = exports.PatientSurvey = exports.PatientResponse = exports.PatientPagedResponse = exports.Patient = exports.Paging = exports.LocationResponse = exports.Location = exports.ListSearch = exports.Int32Response = exports.GenderArrayResponse = exports.Gender = exports.Country = exports.ContactTypeArrayResponse = exports.ContactType = exports.ContactResponse = exports.ContactPagedResponse = exports.Contact = exports.CityListResponse = exports.CityArrayResponse = exports.City = exports.AuditInfo = exports.AddressTypeListResponse = exports.AddressType = exports.DiaRegWebApiClient = void 0;
+exports.ApiException = exports.WeatherForecast = exports.VisitResponse = exports.VisitPagedResponse = exports.Visit = exports.StringStringKeyValuePairListResponse = exports.StringStringKeyValuePair = exports.StringResponse = exports.Response = exports.RegionArrayResponse = exports.Region = exports.PhoneNumberType = exports.PhoneNumberListResponse = exports.PhoneNumber = exports.PersonRole = exports.PersonResponse = exports.PersonPagedResponse = exports.PersonAddressResponse = exports.PersonAddressListResponse = exports.PersonAddress = exports.Person = exports.PatientSurveyStatus = exports.PatientSurveyPagedResponse = exports.PatientSurvey = exports.PatientResponse = exports.PatientPagedResponse = exports.PatientListResponse = exports.Patient = exports.Paging = exports.LocationResponse = exports.Location = exports.ListSearch = exports.Int32Response = exports.GenderArrayResponse = exports.Gender = exports.DoctorListResponse = exports.Doctor = exports.Country = exports.ContactTypeArrayResponse = exports.ContactType = exports.ContactResponse = exports.ContactPagedResponse = exports.Contact = exports.CityListResponse = exports.CityArrayResponse = exports.City = exports.AuditInfo = exports.AppointmentTypeArrayResponse = exports.AppointmentType = exports.AppointmentStatuses = exports.AppointmentStatus = exports.AppointmentResponse = exports.Appointment = exports.AddressTypeListResponse = exports.AddressType = exports.DiaRegWebApiClient = void 0;
 var axios_1 = require("axios");
 var defaultOptions = {
     headers: {
@@ -89,6 +89,589 @@ var DiaRegWebApiClient = /** @class */ (function () {
         //this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
         this.baseUrl = process.env.REACT_APP_API_URL;
     }
+    /**
+  * @param body (optional)
+  * @return Success
+  */
+    DiaRegWebApiClient.prototype.addAppointment = function (body, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/AddAppointment";
+        url_ = url_.replace(/[?&]$/, "");
+        var content_ = JSON.stringify(body);
+        var options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processAddAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processAddAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            var result200 = null;
+            var resultData200 = _responseText;
+            result200 = Int32Response.fromJS(resultData200);
+            return result200;
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.getAppointment = function (id, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/GetAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processGetAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processGetAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            var result200 = null;
+            var resultData200 = _responseText;
+            result200 = AppointmentResponse.fromJS(resultData200);
+            return result200;
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.updateAppointment = function (body, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/UpdateAppointment";
+        url_ = url_.replace(/[?&]$/, "");
+        var content_ = JSON.stringify(body);
+        var options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processUpdateAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processUpdateAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.deleteAppointment = function (id, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/DeleteAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processDeleteAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processDeleteAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.cancelAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/CancelAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processCancelAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processCancelAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.startAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/StartAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processStartAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processStartAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.completeAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/CompleteAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processCompleteAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processCompleteAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.missedAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/MissedAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processMissedAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processMissedAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.rescheduleAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/RescheduleAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processRescheduleAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processRescheduleAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param id (optional)
+     * @param notes (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.confirmAppointment = function (id, notes, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Appointment/ConfirmAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {},
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processConfirmAppointment(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processConfirmAppointment = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param searchString (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.searchDoctorByName = function (searchString, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Doctors/SearchDoctorByName?";
+        if (searchString === null)
+            throw new Error("The parameter 'searchString' cannot be null.");
+        else if (searchString !== undefined)
+            url_ += "searchString=" + encodeURIComponent("" + searchString) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processSearchDoctorByName(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processSearchDoctorByName = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            var result200 = null;
+            var resultData200 = _responseText;
+            result200 = DoctorListResponse.fromJS(resultData200);
+            return result200;
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
     /**
      * @param body (optional)
      * @return Success
@@ -663,6 +1246,60 @@ var DiaRegWebApiClient = /** @class */ (function () {
             var result200 = null;
             var resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
+            return result200;
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @param searchString (optional)
+     * @return Success
+     */
+    DiaRegWebApiClient.prototype.searchPatientByName = function (searchString, cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Patients/SearchPatientByName?";
+        if (searchString === null)
+            throw new Error("The parameter 'searchString' cannot be null.");
+        else if (searchString !== undefined)
+            url_ += "searchString=" + encodeURIComponent("" + searchString) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processSearchPatientByName(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processSearchPatientByName = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            var result200 = null;
+            var resultData200 = _responseText;
+            result200 = PatientListResponse.fromJS(resultData200);
             return result200;
         }
         else if (status !== 200 && status !== 204) {
@@ -2060,6 +2697,55 @@ var DiaRegWebApiClient = /** @class */ (function () {
     /**
      * @return Success
      */
+    DiaRegWebApiClient.prototype.patientsAppointmentGridConfig = function (cancelToken) {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/UIHelper/PatientsAppointmentGridConfig";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken: cancelToken
+        };
+        return this.instance.request(options_)["catch"](function (_error) {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then(function (_response) {
+            return _this.processPatientsAppointmentGridConfig(_response);
+        });
+    };
+    DiaRegWebApiClient.prototype.processPatientsAppointmentGridConfig = function (response) {
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (var k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            var _responseText = response.data;
+            var result200 = null;
+            var resultData200 = _responseText;
+            result200 = StringStringKeyValuePairListResponse.fromJS(resultData200);
+            return result200;
+        }
+        else if (status !== 200 && status !== 204) {
+            var _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    };
+    /**
+     * @return Success
+     */
     DiaRegWebApiClient.prototype.getGenders = function (cancelToken) {
         var _this = this;
         var url_ = this.baseUrl + "/api/Values/GetGenders";
@@ -2261,9 +2947,9 @@ var DiaRegWebApiClient = /** @class */ (function () {
     /**
      * @return Success
      */
-    DiaRegWebApiClient.prototype.getVisitTypes = function (cancelToken) {
+    DiaRegWebApiClient.prototype.getAppointmentTypes = function (cancelToken) {
         var _this = this;
-        var url_ = this.baseUrl + "/api/Values/GetVisitTypes";
+        var url_ = this.baseUrl + "/api/Values/GetAppointmentTypes";
         url_ = url_.replace(/[?&]$/, "");
         var options_ = {
             method: "POST",
@@ -2281,10 +2967,10 @@ var DiaRegWebApiClient = /** @class */ (function () {
                 throw _error;
             }
         }).then(function (_response) {
-            return _this.processGetVisitTypes(_response);
+            return _this.processGetAppointmentTypes(_response);
         });
     };
-    DiaRegWebApiClient.prototype.processGetVisitTypes = function (response) {
+    DiaRegWebApiClient.prototype.processGetAppointmentTypes = function (response) {
         var status = response.status;
         var _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2298,7 +2984,7 @@ var DiaRegWebApiClient = /** @class */ (function () {
             var _responseText = response.data;
             var result200 = null;
             var resultData200 = _responseText;
-            result200 = VisitTypeArrayResponse.fromJS(resultData200);
+            result200 = AppointmentTypeArrayResponse.fromJS(resultData200);
             return result200;
         }
         else if (status !== 200 && status !== 204) {
@@ -2483,8 +3169,9 @@ var AddressType = /** @class */ (function () {
     AddressType.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     AddressType.fromJS = function (data) {
@@ -2496,8 +3183,9 @@ var AddressType = /** @class */ (function () {
     AddressType.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return AddressType;
@@ -2514,6 +3202,7 @@ var AddressTypeListResponse = /** @class */ (function () {
     }
     AddressTypeListResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -2536,6 +3225,7 @@ var AddressTypeListResponse = /** @class */ (function () {
     };
     AddressTypeListResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -2550,6 +3240,215 @@ var AddressTypeListResponse = /** @class */ (function () {
     return AddressTypeListResponse;
 }());
 exports.AddressTypeListResponse = AddressTypeListResponse;
+var Appointment = /** @class */ (function () {
+    function Appointment(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    Appointment.prototype.init = function (_data) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : null;
+            this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : null;
+            this.doctor = _data["doctor"] ? Person.fromJS(_data["doctor"]) : null;
+            this.appointmentDate = _data["appointmentDate"] ? new Date(_data["appointmentDate"].toString()) : null;
+            this.appointmentType = _data["appointmentType"] ? AppointmentType.fromJS(_data["appointmentType"]) : null;
+            this.appointmentAddress = _data["appointmentAddress"] ? PersonAddress.fromJS(_data["appointmentAddress"]) : null;
+            this.appointmentStatus = _data["appointmentStatus"] ? AppointmentStatus.fromJS(_data["appointmentStatus"]) : null;
+            this.notes = _data["notes"] !== undefined ? _data["notes"] : null;
+        }
+    };
+    Appointment.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new Appointment();
+        result.init(data);
+        return result;
+    };
+    Appointment.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : null;
+        data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["patient"] = this.patient ? this.patient.toJSON() : null;
+        data["doctor"] = this.doctor ? this.doctor.toJSON() : null;
+        data["appointmentDate"] = this.appointmentDate ? this.appointmentDate.toISOString() : null;
+        data["appointmentType"] = this.appointmentType ? this.appointmentType.toJSON() : null;
+        data["appointmentAddress"] = this.appointmentAddress ? this.appointmentAddress.toJSON() : null;
+        data["appointmentStatus"] = this.appointmentStatus ? this.appointmentStatus.toJSON() : null;
+        data["notes"] = this.notes !== undefined ? this.notes : null;
+        return data;
+    };
+    return Appointment;
+}());
+exports.Appointment = Appointment;
+var AppointmentResponse = /** @class */ (function () {
+    function AppointmentResponse(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    AppointmentResponse.prototype.init = function (_data) {
+        if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
+            this.status = _data["status"] !== undefined ? _data["status"] : null;
+            this.message = _data["message"] !== undefined ? _data["message"] : null;
+            this.data = _data["data"] ? Appointment.fromJS(_data["data"]) : null;
+        }
+    };
+    AppointmentResponse.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new AppointmentResponse();
+        result.init(data);
+        return result;
+    };
+    AppointmentResponse.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
+        data["status"] = this.status !== undefined ? this.status : null;
+        data["message"] = this.message !== undefined ? this.message : null;
+        data["data"] = this.data ? this.data.toJSON() : null;
+        return data;
+    };
+    return AppointmentResponse;
+}());
+exports.AppointmentResponse = AppointmentResponse;
+var AppointmentStatus = /** @class */ (function () {
+    function AppointmentStatus(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    AppointmentStatus.prototype.init = function (_data) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : null;
+            this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
+        }
+    };
+    AppointmentStatus.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new AppointmentStatus();
+        result.init(data);
+        return result;
+    };
+    AppointmentStatus.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : null;
+        data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
+        return data;
+    };
+    return AppointmentStatus;
+}());
+exports.AppointmentStatus = AppointmentStatus;
+var AppointmentStatuses;
+(function (AppointmentStatuses) {
+    AppointmentStatuses[AppointmentStatuses["_1"] = 1] = "_1";
+    AppointmentStatuses[AppointmentStatuses["_2"] = 2] = "_2";
+    AppointmentStatuses[AppointmentStatuses["_3"] = 3] = "_3";
+    AppointmentStatuses[AppointmentStatuses["_4"] = 4] = "_4";
+    AppointmentStatuses[AppointmentStatuses["_5"] = 5] = "_5";
+    AppointmentStatuses[AppointmentStatuses["_6"] = 6] = "_6";
+    AppointmentStatuses[AppointmentStatuses["_7"] = 7] = "_7";
+    AppointmentStatuses[AppointmentStatuses["_8"] = 8] = "_8";
+    AppointmentStatuses[AppointmentStatuses["_9"] = 9] = "_9";
+})(AppointmentStatuses = exports.AppointmentStatuses || (exports.AppointmentStatuses = {}));
+var AppointmentType = /** @class */ (function () {
+    function AppointmentType(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    AppointmentType.prototype.init = function (_data) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : null;
+            this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
+        }
+    };
+    AppointmentType.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new AppointmentType();
+        result.init(data);
+        return result;
+    };
+    AppointmentType.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : null;
+        data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
+        return data;
+    };
+    return AppointmentType;
+}());
+exports.AppointmentType = AppointmentType;
+var AppointmentTypeArrayResponse = /** @class */ (function () {
+    function AppointmentTypeArrayResponse(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    AppointmentTypeArrayResponse.prototype.init = function (_data) {
+        if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
+            this.status = _data["status"] !== undefined ? _data["status"] : null;
+            this.message = _data["message"] !== undefined ? _data["message"] : null;
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (var _i = 0, _a = _data["data"]; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.data.push(AppointmentType.fromJS(item));
+                }
+            }
+            else {
+                this.data = null;
+            }
+        }
+    };
+    AppointmentTypeArrayResponse.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new AppointmentTypeArrayResponse();
+        result.init(data);
+        return result;
+    };
+    AppointmentTypeArrayResponse.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
+        data["status"] = this.status !== undefined ? this.status : null;
+        data["message"] = this.message !== undefined ? this.message : null;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (var _i = 0, _a = this.data; _i < _a.length; _i++) {
+                var item = _a[_i];
+                data["data"].push(item.toJSON());
+            }
+        }
+        return data;
+    };
+    return AppointmentTypeArrayResponse;
+}());
+exports.AppointmentTypeArrayResponse = AppointmentTypeArrayResponse;
 var AuditInfo = /** @class */ (function () {
     function AuditInfo(data) {
         if (data) {
@@ -2563,7 +3462,7 @@ var AuditInfo = /** @class */ (function () {
         if (_data) {
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : null;
             this.createdBy = _data["createdBy"] !== undefined ? _data["createdBy"] : null;
-            this.lastUpdateDate = _data["lastUpdateDate"] ? new Date(_data["lastUpdateDate"].toString()) : null;
+            this.lastUpdatedDate = _data["lastUpdatedDate"] ? new Date(_data["lastUpdatedDate"].toString()) : null;
             this.lastUpdatedBy = _data["lastUpdatedBy"] !== undefined ? _data["lastUpdatedBy"] : null;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : null;
             this.deletedBy = _data["deletedBy"] !== undefined ? _data["deletedBy"] : null;
@@ -2580,7 +3479,7 @@ var AuditInfo = /** @class */ (function () {
         data = typeof data === 'object' ? data : {};
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : null;
         data["createdBy"] = this.createdBy !== undefined ? this.createdBy : null;
-        data["lastUpdateDate"] = this.lastUpdateDate ? this.lastUpdateDate.toISOString() : null;
+        data["lastUpdatedDate"] = this.lastUpdatedDate ? this.lastUpdatedDate.toISOString() : null;
         data["lastUpdatedBy"] = this.lastUpdatedBy !== undefined ? this.lastUpdatedBy : null;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : null;
         data["deletedBy"] = this.deletedBy !== undefined ? this.deletedBy : null;
@@ -2602,8 +3501,9 @@ var City = /** @class */ (function () {
     City.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.regionId = _data["regionId"] !== undefined ? _data["regionId"] : null;
         }
     };
@@ -2616,8 +3516,9 @@ var City = /** @class */ (function () {
     City.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         data["regionId"] = this.regionId !== undefined ? this.regionId : null;
         return data;
     };
@@ -2635,6 +3536,7 @@ var CityArrayResponse = /** @class */ (function () {
     }
     CityArrayResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -2657,6 +3559,7 @@ var CityArrayResponse = /** @class */ (function () {
     };
     CityArrayResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -2682,6 +3585,7 @@ var CityListResponse = /** @class */ (function () {
     }
     CityListResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -2704,6 +3608,7 @@ var CityListResponse = /** @class */ (function () {
     };
     CityListResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -2743,6 +3648,8 @@ var Contact = /** @class */ (function () {
             this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : null;
             this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.displayName = _data["displayName"] !== undefined ? _data["displayName"] : null;
             this.patientId = _data["patientId"] !== undefined ? _data["patientId"] : null;
             this.contactType = _data["contactType"] ? ContactType.fromJS(_data["contactType"]) : null;
             this.contactTypeId = _data["contactTypeId"] !== undefined ? _data["contactTypeId"] : null;
@@ -2771,6 +3678,8 @@ var Contact = /** @class */ (function () {
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : null;
         data["gender"] = this.gender ? this.gender.toJSON() : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : null;
         data["patientId"] = this.patientId !== undefined ? this.patientId : null;
         data["contactType"] = this.contactType ? this.contactType.toJSON() : null;
         data["contactTypeId"] = this.contactTypeId !== undefined ? this.contactTypeId : null;
@@ -2791,6 +3700,7 @@ var ContactPagedResponse = /** @class */ (function () {
     }
     ContactPagedResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : null;
@@ -2817,6 +3727,7 @@ var ContactPagedResponse = /** @class */ (function () {
     };
     ContactPagedResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : null;
@@ -2846,6 +3757,7 @@ var ContactResponse = /** @class */ (function () {
     }
     ContactResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? Contact.fromJS(_data["data"]) : null;
@@ -2859,6 +3771,7 @@ var ContactResponse = /** @class */ (function () {
     };
     ContactResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -2879,8 +3792,9 @@ var ContactType = /** @class */ (function () {
     ContactType.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     ContactType.fromJS = function (data) {
@@ -2892,8 +3806,9 @@ var ContactType = /** @class */ (function () {
     ContactType.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return ContactType;
@@ -2910,6 +3825,7 @@ var ContactTypeArrayResponse = /** @class */ (function () {
     }
     ContactTypeArrayResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -2932,6 +3848,7 @@ var ContactTypeArrayResponse = /** @class */ (function () {
     };
     ContactTypeArrayResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -2958,8 +3875,9 @@ var Country = /** @class */ (function () {
     Country.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     Country.fromJS = function (data) {
@@ -2971,13 +3889,159 @@ var Country = /** @class */ (function () {
     Country.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return Country;
 }());
 exports.Country = Country;
+var Doctor = /** @class */ (function () {
+    function Doctor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    Doctor.prototype.init = function (_data) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : null;
+            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : null;
+            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : null;
+            this.emailAddress = _data["emailAddress"] !== undefined ? _data["emailAddress"] : null;
+            this.location = _data["location"] ? Location.fromJS(_data["location"]) : null;
+            this.middleName = _data["middleName"] !== undefined ? _data["middleName"] : null;
+            this.address1 = _data["address1"] !== undefined ? _data["address1"] : null;
+            this.address2 = _data["address2"] !== undefined ? _data["address2"] : null;
+            this.title = _data["title"] !== undefined ? _data["title"] : null;
+            this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : null;
+            this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : null;
+            this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : null;
+            this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : null;
+            this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.displayName = _data["displayName"] !== undefined ? _data["displayName"] : null;
+            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : null;
+            this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : null;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [];
+                for (var _i = 0, _a = _data["roles"]; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.roles.push(PersonRole.fromJS(item));
+                }
+            }
+            else {
+                this.roles = null;
+            }
+            if (Array.isArray(_data["addresses"])) {
+                this.addresses = [];
+                for (var _b = 0, _c = _data["addresses"]; _b < _c.length; _b++) {
+                    var item = _c[_b];
+                    this.addresses.push(PersonAddress.fromJS(item));
+                }
+            }
+            else {
+                this.addresses = null;
+            }
+        }
+    };
+    Doctor.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new Doctor();
+        result.init(data);
+        return result;
+    };
+    Doctor.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : null;
+        data["firstName"] = this.firstName !== undefined ? this.firstName : null;
+        data["lastName"] = this.lastName !== undefined ? this.lastName : null;
+        data["emailAddress"] = this.emailAddress !== undefined ? this.emailAddress : null;
+        data["location"] = this.location ? this.location.toJSON() : null;
+        data["middleName"] = this.middleName !== undefined ? this.middleName : null;
+        data["address1"] = this.address1 !== undefined ? this.address1 : null;
+        data["address2"] = this.address2 !== undefined ? this.address2 : null;
+        data["title"] = this.title !== undefined ? this.title : null;
+        data["suffix"] = this.suffix !== undefined ? this.suffix : null;
+        data["cellPhone"] = this.cellPhone !== undefined ? this.cellPhone : null;
+        data["homePhone"] = this.homePhone !== undefined ? this.homePhone : null;
+        data["gender"] = this.gender ? this.gender.toJSON() : null;
+        data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : null;
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : null;
+        data["role"] = this.role ? this.role.toJSON() : null;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (var _i = 0, _a = this.roles; _i < _a.length; _i++) {
+                var item = _a[_i];
+                data["roles"].push(item.toJSON());
+            }
+        }
+        if (Array.isArray(this.addresses)) {
+            data["addresses"] = [];
+            for (var _b = 0, _c = this.addresses; _b < _c.length; _b++) {
+                var item = _c[_b];
+                data["addresses"].push(item.toJSON());
+            }
+        }
+        return data;
+    };
+    return Doctor;
+}());
+exports.Doctor = Doctor;
+var DoctorListResponse = /** @class */ (function () {
+    function DoctorListResponse(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    DoctorListResponse.prototype.init = function (_data) {
+        if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
+            this.status = _data["status"] !== undefined ? _data["status"] : null;
+            this.message = _data["message"] !== undefined ? _data["message"] : null;
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (var _i = 0, _a = _data["data"]; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.data.push(Doctor.fromJS(item));
+                }
+            }
+            else {
+                this.data = null;
+            }
+        }
+    };
+    DoctorListResponse.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new DoctorListResponse();
+        result.init(data);
+        return result;
+    };
+    DoctorListResponse.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
+        data["status"] = this.status !== undefined ? this.status : null;
+        data["message"] = this.message !== undefined ? this.message : null;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (var _i = 0, _a = this.data; _i < _a.length; _i++) {
+                var item = _a[_i];
+                data["data"].push(item.toJSON());
+            }
+        }
+        return data;
+    };
+    return DoctorListResponse;
+}());
+exports.DoctorListResponse = DoctorListResponse;
 var Gender = /** @class */ (function () {
     function Gender(data) {
         if (data) {
@@ -2990,8 +4054,9 @@ var Gender = /** @class */ (function () {
     Gender.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     Gender.fromJS = function (data) {
@@ -3003,8 +4068,9 @@ var Gender = /** @class */ (function () {
     Gender.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return Gender;
@@ -3021,6 +4087,7 @@ var GenderArrayResponse = /** @class */ (function () {
     }
     GenderArrayResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -3043,6 +4110,7 @@ var GenderArrayResponse = /** @class */ (function () {
     };
     GenderArrayResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -3068,6 +4136,7 @@ var Int32Response = /** @class */ (function () {
     }
     Int32Response.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] !== undefined ? _data["data"] : null;
@@ -3081,6 +4150,7 @@ var Int32Response = /** @class */ (function () {
     };
     Int32Response.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data !== undefined ? this.data : null;
@@ -3164,6 +4234,7 @@ var LocationResponse = /** @class */ (function () {
     }
     LocationResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? Location.fromJS(_data["data"]) : null;
@@ -3177,6 +4248,7 @@ var LocationResponse = /** @class */ (function () {
     };
     LocationResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -3238,9 +4310,32 @@ var Patient = /** @class */ (function () {
             this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : null;
             this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : null;
             this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : null;
-            this.active = _data["active"] !== undefined ? _data["active"] : null;
-            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : null;
             this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : null;
+            this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.displayName = _data["displayName"] !== undefined ? _data["displayName"] : null;
+            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : null;
+            this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : null;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [];
+                for (var _i = 0, _a = _data["roles"]; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.roles.push(PersonRole.fromJS(item));
+                }
+            }
+            else {
+                this.roles = null;
+            }
+            if (Array.isArray(_data["addresses"])) {
+                this.addresses = [];
+                for (var _b = 0, _c = _data["addresses"]; _b < _c.length; _b++) {
+                    var item = _c[_b];
+                    this.addresses.push(PersonAddress.fromJS(item));
+                }
+            }
+            else {
+                this.addresses = null;
+            }
         }
     };
     Patient.fromJS = function (data) {
@@ -3263,14 +4358,80 @@ var Patient = /** @class */ (function () {
         data["suffix"] = this.suffix !== undefined ? this.suffix : null;
         data["cellPhone"] = this.cellPhone !== undefined ? this.cellPhone : null;
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : null;
-        data["active"] = this.active !== undefined ? this.active : null;
-        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : null;
         data["gender"] = this.gender ? this.gender.toJSON() : null;
+        data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : null;
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : null;
+        data["role"] = this.role ? this.role.toJSON() : null;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (var _i = 0, _a = this.roles; _i < _a.length; _i++) {
+                var item = _a[_i];
+                data["roles"].push(item.toJSON());
+            }
+        }
+        if (Array.isArray(this.addresses)) {
+            data["addresses"] = [];
+            for (var _b = 0, _c = this.addresses; _b < _c.length; _b++) {
+                var item = _c[_b];
+                data["addresses"].push(item.toJSON());
+            }
+        }
         return data;
     };
     return Patient;
 }());
 exports.Patient = Patient;
+var PatientListResponse = /** @class */ (function () {
+    function PatientListResponse(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    PatientListResponse.prototype.init = function (_data) {
+        if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
+            this.status = _data["status"] !== undefined ? _data["status"] : null;
+            this.message = _data["message"] !== undefined ? _data["message"] : null;
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (var _i = 0, _a = _data["data"]; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    this.data.push(Patient.fromJS(item));
+                }
+            }
+            else {
+                this.data = null;
+            }
+        }
+    };
+    PatientListResponse.fromJS = function (data) {
+        data = typeof data === 'object' ? data : {};
+        var result = new PatientListResponse();
+        result.init(data);
+        return result;
+    };
+    PatientListResponse.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
+        data["status"] = this.status !== undefined ? this.status : null;
+        data["message"] = this.message !== undefined ? this.message : null;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (var _i = 0, _a = this.data; _i < _a.length; _i++) {
+                var item = _a[_i];
+                data["data"].push(item.toJSON());
+            }
+        }
+        return data;
+    };
+    return PatientListResponse;
+}());
+exports.PatientListResponse = PatientListResponse;
 var PatientPagedResponse = /** @class */ (function () {
     function PatientPagedResponse(data) {
         if (data) {
@@ -3282,6 +4443,7 @@ var PatientPagedResponse = /** @class */ (function () {
     }
     PatientPagedResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : null;
@@ -3308,6 +4470,7 @@ var PatientPagedResponse = /** @class */ (function () {
     };
     PatientPagedResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : null;
@@ -3337,6 +4500,7 @@ var PatientResponse = /** @class */ (function () {
     }
     PatientResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? Patient.fromJS(_data["data"]) : null;
@@ -3350,6 +4514,7 @@ var PatientResponse = /** @class */ (function () {
     };
     PatientResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -3407,6 +4572,7 @@ var PatientSurveyPagedResponse = /** @class */ (function () {
     }
     PatientSurveyPagedResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : null;
@@ -3433,6 +4599,7 @@ var PatientSurveyPagedResponse = /** @class */ (function () {
     };
     PatientSurveyPagedResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : null;
@@ -3463,8 +4630,9 @@ var PatientSurveyStatus = /** @class */ (function () {
     PatientSurveyStatus.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     PatientSurveyStatus.fromJS = function (data) {
@@ -3476,8 +4644,9 @@ var PatientSurveyStatus = /** @class */ (function () {
     PatientSurveyStatus.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return PatientSurveyStatus;
@@ -3508,9 +4677,10 @@ var Person = /** @class */ (function () {
             this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : null;
             this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.displayName = _data["displayName"] !== undefined ? _data["displayName"] : null;
             this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : null;
             this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
             if (Array.isArray(_data["roles"])) {
                 this.roles = [];
                 for (var _i = 0, _a = _data["roles"]; _i < _a.length; _i++) {
@@ -3555,9 +4725,10 @@ var Person = /** @class */ (function () {
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : null;
         data["gender"] = this.gender ? this.gender.toJSON() : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : null;
         data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : null;
         data["role"] = this.role ? this.role.toJSON() : null;
-        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (var _i = 0, _a = this.roles; _i < _a.length; _i++) {
@@ -3589,14 +4760,14 @@ var PersonAddress = /** @class */ (function () {
     PersonAddress.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.location = _data["location"] ? Location.fromJS(_data["location"]) : null;
             this.address1 = _data["address1"] !== undefined ? _data["address1"] : null;
             this.address2 = _data["address2"] !== undefined ? _data["address2"] : null;
             this.type = _data["type"] ? AddressType.fromJS(_data["type"]) : null;
             this.personId = _data["personId"] !== undefined ? _data["personId"] : null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
             this.phoneNumber = _data["phoneNumber"] !== undefined ? _data["phoneNumber"] : null;
         }
     };
@@ -3609,14 +4780,14 @@ var PersonAddress = /** @class */ (function () {
     PersonAddress.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         data["location"] = this.location ? this.location.toJSON() : null;
         data["address1"] = this.address1 !== undefined ? this.address1 : null;
         data["address2"] = this.address2 !== undefined ? this.address2 : null;
         data["type"] = this.type ? this.type.toJSON() : null;
         data["personId"] = this.personId !== undefined ? this.personId : null;
-        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
         data["phoneNumber"] = this.phoneNumber !== undefined ? this.phoneNumber : null;
         return data;
     };
@@ -3634,6 +4805,7 @@ var PersonAddressListResponse = /** @class */ (function () {
     }
     PersonAddressListResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -3656,6 +4828,7 @@ var PersonAddressListResponse = /** @class */ (function () {
     };
     PersonAddressListResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -3681,6 +4854,7 @@ var PersonAddressResponse = /** @class */ (function () {
     }
     PersonAddressResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? PersonAddress.fromJS(_data["data"]) : null;
@@ -3694,6 +4868,7 @@ var PersonAddressResponse = /** @class */ (function () {
     };
     PersonAddressResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -3713,6 +4888,7 @@ var PersonPagedResponse = /** @class */ (function () {
     }
     PersonPagedResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : null;
@@ -3739,6 +4915,7 @@ var PersonPagedResponse = /** @class */ (function () {
     };
     PersonPagedResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : null;
@@ -3768,6 +4945,7 @@ var PersonResponse = /** @class */ (function () {
     }
     PersonResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? Person.fromJS(_data["data"]) : null;
@@ -3781,6 +4959,7 @@ var PersonResponse = /** @class */ (function () {
     };
     PersonResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -3801,8 +4980,9 @@ var PersonRole = /** @class */ (function () {
     PersonRole.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     PersonRole.fromJS = function (data) {
@@ -3814,8 +4994,9 @@ var PersonRole = /** @class */ (function () {
     PersonRole.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return PersonRole;
@@ -3834,9 +5015,9 @@ var PhoneNumber = /** @class */ (function () {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
             this.type = _data["type"] ? PhoneNumberType.fromJS(_data["type"]) : null;
             this.phoneNumberValue = _data["phoneNumberValue"] !== undefined ? _data["phoneNumberValue"] : null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
         }
     };
     PhoneNumber.fromJS = function (data) {
@@ -3849,9 +5030,9 @@ var PhoneNumber = /** @class */ (function () {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
         data["type"] = this.type ? this.type.toJSON() : null;
         data["phoneNumberValue"] = this.phoneNumberValue !== undefined ? this.phoneNumberValue : null;
-        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
         return data;
     };
     return PhoneNumber;
@@ -3868,6 +5049,7 @@ var PhoneNumberListResponse = /** @class */ (function () {
     }
     PhoneNumberListResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -3890,6 +5072,7 @@ var PhoneNumberListResponse = /** @class */ (function () {
     };
     PhoneNumberListResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -3916,8 +5099,9 @@ var PhoneNumberType = /** @class */ (function () {
     PhoneNumberType.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
         }
     };
     PhoneNumberType.fromJS = function (data) {
@@ -3929,8 +5113,9 @@ var PhoneNumberType = /** @class */ (function () {
     PhoneNumberType.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         return data;
     };
     return PhoneNumberType;
@@ -3948,8 +5133,9 @@ var Region = /** @class */ (function () {
     Region.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.active = _data["active"] !== undefined ? _data["active"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
+            this.name = _data["name"] !== undefined ? _data["name"] : null;
             this.countryId = _data["countryId"] !== undefined ? _data["countryId"] : null;
         }
     };
@@ -3962,8 +5148,9 @@ var Region = /** @class */ (function () {
     Region.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
         data["active"] = this.active !== undefined ? this.active : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
+        data["name"] = this.name !== undefined ? this.name : null;
         data["countryId"] = this.countryId !== undefined ? this.countryId : null;
         return data;
     };
@@ -3981,6 +5168,7 @@ var RegionArrayResponse = /** @class */ (function () {
     }
     RegionArrayResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -4003,6 +5191,7 @@ var RegionArrayResponse = /** @class */ (function () {
     };
     RegionArrayResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -4028,6 +5217,7 @@ var Response = /** @class */ (function () {
     }
     Response.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
         }
@@ -4040,6 +5230,7 @@ var Response = /** @class */ (function () {
     };
     Response.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         return data;
@@ -4058,6 +5249,7 @@ var StringResponse = /** @class */ (function () {
     }
     StringResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] !== undefined ? _data["data"] : null;
@@ -4071,6 +5263,7 @@ var StringResponse = /** @class */ (function () {
     };
     StringResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data !== undefined ? this.data : null;
@@ -4120,6 +5313,7 @@ var StringStringKeyValuePairListResponse = /** @class */ (function () {
     }
     StringStringKeyValuePairListResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             if (Array.isArray(_data["data"])) {
@@ -4142,6 +5336,7 @@ var StringStringKeyValuePairListResponse = /** @class */ (function () {
     };
     StringStringKeyValuePairListResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         if (Array.isArray(this.data)) {
@@ -4168,9 +5363,10 @@ var Visit = /** @class */ (function () {
     Visit.prototype.init = function (_data) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : null;
             this.name = _data["name"] !== undefined ? _data["name"] : null;
-            this.visitTypeId = _data["visitTypeId"] !== undefined ? _data["visitTypeId"] : null;
-            this.visitDate = _data["visitDate"] ? new Date(_data["visitDate"].toString()) : null;
+            this.appointmentTypeId = _data["appointmentTypeId"] !== undefined ? _data["appointmentTypeId"] : null;
+            this.appointmentDate = _data["appointmentDate"] ? new Date(_data["appointmentDate"].toString()) : null;
             this.foodMedicationAllergies = _data["foodMedicationAllergies"] !== undefined ? _data["foodMedicationAllergies"] : null;
             this.typeOfAllergies = _data["typeOfAllergies"] !== undefined ? _data["typeOfAllergies"] : null;
             this.smokes = _data["smokes"] !== undefined ? _data["smokes"] : null;
@@ -4181,7 +5377,7 @@ var Visit = /** @class */ (function () {
             this.lastFluShotDate = _data["lastFluShotDate"] ? new Date(_data["lastFluShotDate"].toString()) : null;
             this.lastPneumoShotDate = _data["lastPneumoShotDate"] ? new Date(_data["lastPneumoShotDate"].toString()) : null;
             this.additionalInfo = _data["additionalInfo"] !== undefined ? _data["additionalInfo"] : null;
-            this.visitType = _data["visitType"] ? VisitType.fromJS(_data["visitType"]) : null;
+            this.appointmentType = _data["appointmentType"] ? AppointmentType.fromJS(_data["appointmentType"]) : null;
             this.patientId = _data["patientId"] !== undefined ? _data["patientId"] : null;
         }
     };
@@ -4194,9 +5390,10 @@ var Visit = /** @class */ (function () {
     Visit.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : null;
         data["name"] = this.name !== undefined ? this.name : null;
-        data["visitTypeId"] = this.visitTypeId !== undefined ? this.visitTypeId : null;
-        data["visitDate"] = this.visitDate ? this.visitDate.toISOString() : null;
+        data["appointmentTypeId"] = this.appointmentTypeId !== undefined ? this.appointmentTypeId : null;
+        data["appointmentDate"] = this.appointmentDate ? this.appointmentDate.toISOString() : null;
         data["foodMedicationAllergies"] = this.foodMedicationAllergies !== undefined ? this.foodMedicationAllergies : null;
         data["typeOfAllergies"] = this.typeOfAllergies !== undefined ? this.typeOfAllergies : null;
         data["smokes"] = this.smokes !== undefined ? this.smokes : null;
@@ -4207,7 +5404,7 @@ var Visit = /** @class */ (function () {
         data["lastFluShotDate"] = this.lastFluShotDate ? this.lastFluShotDate.toISOString() : null;
         data["lastPneumoShotDate"] = this.lastPneumoShotDate ? this.lastPneumoShotDate.toISOString() : null;
         data["additionalInfo"] = this.additionalInfo !== undefined ? this.additionalInfo : null;
-        data["visitType"] = this.visitType ? this.visitType.toJSON() : null;
+        data["appointmentType"] = this.appointmentType ? this.appointmentType.toJSON() : null;
         data["patientId"] = this.patientId !== undefined ? this.patientId : null;
         return data;
     };
@@ -4225,6 +5422,7 @@ var VisitPagedResponse = /** @class */ (function () {
     }
     VisitPagedResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : null;
@@ -4251,6 +5449,7 @@ var VisitPagedResponse = /** @class */ (function () {
     };
     VisitPagedResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : null;
@@ -4280,6 +5479,7 @@ var VisitResponse = /** @class */ (function () {
     }
     VisitResponse.prototype.init = function (_data) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : null;
             this.status = _data["status"] !== undefined ? _data["status"] : null;
             this.message = _data["message"] !== undefined ? _data["message"] : null;
             this.data = _data["data"] ? Visit.fromJS(_data["data"]) : null;
@@ -4293,6 +5493,7 @@ var VisitResponse = /** @class */ (function () {
     };
     VisitResponse.prototype.toJSON = function (data) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : null;
         data["status"] = this.status !== undefined ? this.status : null;
         data["message"] = this.message !== undefined ? this.message : null;
         data["data"] = this.data ? this.data.toJSON() : null;
@@ -4301,85 +5502,6 @@ var VisitResponse = /** @class */ (function () {
     return VisitResponse;
 }());
 exports.VisitResponse = VisitResponse;
-var VisitType = /** @class */ (function () {
-    function VisitType(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    VisitType.prototype.init = function (_data) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : null;
-            this.name = _data["name"] !== undefined ? _data["name"] : null;
-            this.active = _data["active"] !== undefined ? _data["active"] : null;
-        }
-    };
-    VisitType.fromJS = function (data) {
-        data = typeof data === 'object' ? data : {};
-        var result = new VisitType();
-        result.init(data);
-        return result;
-    };
-    VisitType.prototype.toJSON = function (data) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : null;
-        data["name"] = this.name !== undefined ? this.name : null;
-        data["active"] = this.active !== undefined ? this.active : null;
-        return data;
-    };
-    return VisitType;
-}());
-exports.VisitType = VisitType;
-var VisitTypeArrayResponse = /** @class */ (function () {
-    function VisitTypeArrayResponse(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    VisitTypeArrayResponse.prototype.init = function (_data) {
-        if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : null;
-            this.message = _data["message"] !== undefined ? _data["message"] : null;
-            if (Array.isArray(_data["data"])) {
-                this.data = [];
-                for (var _i = 0, _a = _data["data"]; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    this.data.push(VisitType.fromJS(item));
-                }
-            }
-            else {
-                this.data = null;
-            }
-        }
-    };
-    VisitTypeArrayResponse.fromJS = function (data) {
-        data = typeof data === 'object' ? data : {};
-        var result = new VisitTypeArrayResponse();
-        result.init(data);
-        return result;
-    };
-    VisitTypeArrayResponse.prototype.toJSON = function (data) {
-        data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : null;
-        data["message"] = this.message !== undefined ? this.message : null;
-        if (Array.isArray(this.data)) {
-            data["data"] = [];
-            for (var _i = 0, _a = this.data; _i < _a.length; _i++) {
-                var item = _a[_i];
-                data["data"].push(item.toJSON());
-            }
-        }
-        return data;
-    };
-    return VisitTypeArrayResponse;
-}());
-exports.VisitTypeArrayResponse = VisitTypeArrayResponse;
 var WeatherForecast = /** @class */ (function () {
     function WeatherForecast(data) {
         if (data) {

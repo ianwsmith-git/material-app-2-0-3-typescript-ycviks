@@ -17,7 +17,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import styled from 'styled-components/macro';
 import * as Yup from 'yup';
 
-import { City, CityArrayResponse, DiaRegWebApiClient as Client, Country, Gender, GenderArrayResponse, ICity, ICountry, ILocation, IPatient, IRegion, Location, Patient, PatientResponse, Region, RegionArrayResponse } from '../../api/DiaRegApi';
+import { City, CityArrayResponse, DiaRegWebApiClient as Client, Country, Gender, GenderArrayResponse, ICity, ICountry, ILocation, IPatient, IRegion, Location, Patient, PatientResponse, Region, RegionArrayResponse, PersonRole, AuditInfo } from '../../api/DiaRegApi';
 //import withAuthProvider, { AuthComponentProps } from '../../auth/AuthProvider';
 import Response from '../../models/Response';
 import { setupCommandBar } from '../../redux/reducers/commandBarReducer';
@@ -25,6 +25,7 @@ import store from '../../redux/store';
 import ContactsTable from './contacts/Contacts';
 import SurveysTable from './surveys/PatientSurveys'
 import VisitsTable from './visits/Visits';
+import { PersonAddress } from './../../api/DiaRegApi';
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -92,23 +93,6 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-const initialValues = new Patient({
-    id: 0,
-    firstName: "",
-    lastName: "",
-    birthDate: new Date(),
-    emailAddress: "",
-    location: new Location({ city: new City({ id: 0, name: "", regionId: 0 } as ICity), region: new Region({ id: 0, name: "", countryId: 0 } as IRegion), country: new Country({ id: 0, name: "" } as ICountry) } as ILocation),
-    middleName: "",
-    address1: "",
-    address2: "",
-    title: "",
-    suffix: "",
-    cellPhone: "",
-    homePhone: "",
-    gender: { id: 1 as number, name: "Male" } as Gender
-} as IPatient);
-
 type ParentChildFormPropsType = {
     parentAlertHandler: Function
 };
@@ -139,7 +123,8 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
     cancelButtonRef: React.RefObject<HTMLButtonElement>;
     formRef: React.RefObject<FormikProps<Patient>>;
 
-    state = { id: 0 as number, patient: initialValues, genders: [] as Array<Gender>, regions: [] as Array<Region>, cities: [] as Array<City>, panelValue: 0, confirmClose: false };
+    // TODO Fix this by adding newItem
+    state = { id: 0 as number, patient: new Patient(), genders: [] as Array<Gender>, regions: [] as Array<Region>, cities: [] as Array<City>, panelValue: 0, confirmClose: false };
 
     constructor(props: RouteComponentProps & StyledComponentProps & ParentChildFormPropsType) {
         super(props);
@@ -165,7 +150,7 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
         return new Client().getRegions();
     }
 
-    getCities = async (regionId: number): Promise<CityArrayResponse> => {
+    getCities = async (regionId: string): Promise<CityArrayResponse> => {
         return new Client().getCities(regionId);
     }
 
@@ -179,19 +164,21 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
             this.setState({ regions: response.data });
         });
 
-        await this.getCities(+this.state.regions[0].id!).then((response: CityArrayResponse) => {
+        await this.getCities(this.state.regions[0].id!).then((response: CityArrayResponse) => {
             this.setState({ cities: response.data });
         });
 
         let location = new Location();
         location.region = this.state.regions[0];
         location.city = this.state.cities[0];
-        location.country = new Country({ id: 0, name: "", active: true } as ICountry);
+
+        // TODO Fix this by adding new
+        //location.country = new Country({ id: 0, name: "", active: true } as ICountry);
 
 
 
         let newPatient = new Patient({
-            id: 0,
+            id: "",
             firstName: "",
             lastName: "",
             birthDate: new Date(),
@@ -205,8 +192,12 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
             cellPhone: "",
             homePhone: "",
             gender: this.state.genders[0],
-            active: true
-
+            active: true,
+            role: new PersonRole(),
+            auditInfo: new AuditInfo(),
+            roles: Array<PersonRole>(),
+            addresses: Array<PersonAddress>(),
+            displayName: ""
         }
 
         );
@@ -329,7 +320,8 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
 
             let responseInfo: Response<number>;
 
-            if (values.id !== 0) {
+            // TODO Fix with new item
+            if (true) {
                 var response = await this.updatePatient(values);
                 responseInfo = response as Response<number>;
             }
@@ -339,10 +331,12 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
             }
 
             if (responseInfo.status === "success") {
-                if (values.id === 0) {
+
+                // TODO Fix with new item
+                /* if (values.id === 0) {
                     values.id = responseInfo.data!;
                 }
-
+ */
                 this.setState({ patient: values });
                 this.setState({ dataChanged: true });
 
@@ -600,13 +594,13 @@ class ParentChildForm extends React.Component<RouteComponentProps & StyledCompon
 
                 </Formik>
 
-                <Card hidden={+this.state.patient.id === 0}>
+                <Card hidden={+this.state.patient.id! === 0}>
                     <CardContent>
                         <AppBar position="static" elevation={10}>
                             <Tabs value={this.state.panelValue} onChange={this.handlePanelChange} classes={{ indicator: classes!.indicator! }}>
-                                <Tab label="CONTACTS" {...this.a11yProps(0)} disabled={+this.state.patient.id === 0} />
-                                <Tab label="VISITS" {...this.a11yProps(1)} disabled={+this.state.patient.id === 0} />
-                                <Tab label="SURVEYS" {...this.a11yProps(2)} disabled={+this.state.patient.id === 0} />
+                                <Tab label="CONTACTS" {...this.a11yProps(0)} disabled={+this.state.patient.id! === 0} />
+                                <Tab label="VISITS" {...this.a11yProps(1)} disabled={+this.state.patient.id! === 0} />
+                                <Tab label="SURVEYS" {...this.a11yProps(2)} disabled={+this.state.patient.id! === 0} />
                             </Tabs>
                         </AppBar>
                         <TabPanel value={this.state.panelValue} index={0}>

@@ -6,11 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import throttle from "lodash/throttle";
+import throttle from 'lodash/throttle';
 import React from 'react';
 import { Config, ImmutableTree, LocaleSettings, Utils as QBUtils, Settings } from 'react-awesome-query-builder';
-/* import QueryBuilder from '../querybuilder/QueryBuilder'; */
-import { JsonGroup, JsonTree, Utils as QbUtils } from 'react-awesome-query-builder/lib';
+import { JsonTree, Utils as QbUtils } from 'react-awesome-query-builder/lib';
 import MaterialConfig from 'react-awesome-query-builder/lib/config/material';
 
 import QueryBuilder from '../querybuilder/QueryBuilder';
@@ -168,13 +167,6 @@ export default function FilterDialog(props: FilterDialogPropTypes) {
 
     function handleFilterChanged(tree: ImmutableTree) {
         tree = QbUtils.checkTree(tree, config);
-        var check = QbUtils.isValidTree(tree);
-        var logic = QbUtils.jsonLogicFormat(tree, config)
-        const jsonTree = QbUtils.getTree(tree);
-
-        console.log(logic);
-        console.log(jsonTree);
-
         immutableTree = tree;
 
         updateResult();
@@ -198,7 +190,7 @@ export default function FilterDialog(props: FilterDialogPropTypes) {
                 color="default"
                 className={classes.button}
                 startIcon={<FilterListIcon />}
-                onClick={(e) => {
+                onClick={() => {
                     handleOpenDialog();
                 }}
             >

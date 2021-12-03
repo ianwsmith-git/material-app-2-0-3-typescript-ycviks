@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* tslint:disable */
 /* eslint-disable */
 //----------------------
@@ -57,6 +58,751 @@ export class DiaRegWebApiClient {
     }
 
     /**
+       * @param body (optional) 
+       * @return Success
+       */
+    addAppointment(body: Appointment | undefined, cancelToken?: CancelToken | undefined): Promise<StringResponse> {
+        let url_ = this.baseUrl + "/api/Appointment/AddAppointment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processAddAppointment(_response);
+        });
+    }
+
+    protected processAddAppointment(response: AxiosResponse<string>): Promise<StringResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = StringResponse.fromJS(resultData200);
+            return Promise.resolve<StringResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<StringResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    createNewAppointment(cancelToken?: CancelToken | undefined): Promise<AppointmentResponse> {
+        let url_ = this.baseUrl + "/api/Appointment/CreateNewAppointment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processCreateNewAppointment(_response);
+        });
+    }
+
+    protected processCreateNewAppointment(response: AxiosResponse<string>): Promise<AppointmentResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = AppointmentResponse.fromJS(resultData200);
+            return Promise.resolve<AppointmentResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentResponse>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getAppointment(id: string | undefined, cancelToken?: CancelToken | undefined): Promise<AppointmentResponse> {
+        let url_ = this.baseUrl + "/api/Appointment/GetAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetAppointment(_response);
+        });
+    }
+
+    protected processGetAppointment(response: AxiosResponse<string>): Promise<AppointmentResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = AppointmentResponse.fromJS(resultData200);
+            return Promise.resolve<AppointmentResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentResponse>(<any>null);
+    }
+
+    /**
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return Success
+     */
+    getAppointments(startDate: Date | undefined, endDate: Date | undefined, cancelToken?: CancelToken | undefined): Promise<AppointmentListResponse> {
+        let url_ = this.baseUrl + "/api/Appointment/GetAppointments?";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetAppointments(_response);
+        });
+    }
+
+    protected processGetAppointments(response: AxiosResponse<string>): Promise<AppointmentListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = AppointmentListResponse.fromJS(resultData200);
+            return Promise.resolve<AppointmentListResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentListResponse>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateAppointment(body: Appointment | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/UpdateAppointment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processUpdateAppointment(_response);
+        });
+    }
+
+    protected processUpdateAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteAppointment(id: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/DeleteAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processDeleteAppointment(_response);
+        });
+    }
+
+    protected processDeleteAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    cancelAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/CancelAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processCancelAppointment(_response);
+        });
+    }
+
+    protected processCancelAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    startAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/StartAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processStartAppointment(_response);
+        });
+    }
+
+    protected processStartAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    completeAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/CompleteAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processCompleteAppointment(_response);
+        });
+    }
+
+    protected processCompleteAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    missedAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/MissedAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processMissedAppointment(_response);
+        });
+    }
+
+    protected processMissedAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    rescheduleAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/RescheduleAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processRescheduleAppointment(_response);
+        });
+    }
+
+    protected processRescheduleAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @param notes (optional) 
+     * @return Success
+     */
+    confirmAppointment(id: string | undefined, notes: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Appointment/ConfirmAppointment?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (notes === null)
+            throw new Error("The parameter 'notes' cannot be null.");
+        else if (notes !== undefined)
+            url_ += "notes=" + encodeURIComponent("" + notes) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processConfirmAppointment(_response);
+        });
+    }
+
+    protected processConfirmAppointment(response: AxiosResponse<string>): Promise<Response> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = Response.fromJS(resultData200);
+            return Promise.resolve<Response>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param searchString (optional) 
+     * @return Success
+     */
+    searchDoctorByName(searchString: string | undefined, cancelToken?: CancelToken | undefined): Promise<DoctorListResponse> {
+        let url_ = this.baseUrl + "/api/Doctors/SearchDoctorByName?";
+        if (searchString === null)
+            throw new Error("The parameter 'searchString' cannot be null.");
+        else if (searchString !== undefined)
+            url_ += "searchString=" + encodeURIComponent("" + searchString) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processSearchDoctorByName(_response);
+        });
+    }
+
+    protected processSearchDoctorByName(response: AxiosResponse<string>): Promise<DoctorListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = DoctorListResponse.fromJS(resultData200);
+            return Promise.resolve<DoctorListResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<DoctorListResponse>(<any>null);
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
@@ -71,7 +817,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -83,12 +829,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetDoctors(_response);
         });
     }
 
-    protected processGetDoctors(response: AxiosResponse): Promise<PersonPagedResponse> {
+    protected processGetDoctors(response: AxiosResponse<string>): Promise<PersonPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -103,7 +849,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -115,7 +861,7 @@ export class DiaRegWebApiClient {
      * @param doctorId (optional) 
      * @return Success
      */
-    getDoctor(doctorId: number | undefined, cancelToken?: CancelToken | undefined): Promise<PersonResponse> {
+    getDoctor(doctorId: string | undefined, cancelToken?: CancelToken | undefined): Promise<PersonResponse> {
         let url_ = this.baseUrl + "/api/Doctors/GetDoctor?";
         if (doctorId === null)
             throw new Error("The parameter 'doctorId' cannot be null.");
@@ -138,12 +884,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetDoctor(_response);
         });
     }
 
-    protected processGetDoctor(response: AxiosResponse): Promise<PersonResponse> {
+    protected processGetDoctor(response: AxiosResponse<string>): Promise<PersonResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -158,7 +904,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -170,7 +916,7 @@ export class DiaRegWebApiClient {
      * @param doctorId (optional) 
      * @return Success
      */
-    getDoctorLocations(doctorId: number | undefined, cancelToken?: CancelToken | undefined): Promise<PersonAddressListResponse> {
+    getDoctorLocations(doctorId: string | undefined, cancelToken?: CancelToken | undefined): Promise<PersonAddressListResponse> {
         let url_ = this.baseUrl + "/api/Doctors/GetDoctorLocations?";
         if (doctorId === null)
             throw new Error("The parameter 'doctorId' cannot be null.");
@@ -193,12 +939,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetDoctorLocations(_response);
         });
     }
 
-    protected processGetDoctorLocations(response: AxiosResponse): Promise<PersonAddressListResponse> {
+    protected processGetDoctorLocations(response: AxiosResponse<string>): Promise<PersonAddressListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -213,7 +959,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonAddressListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonAddressListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -225,7 +971,7 @@ export class DiaRegWebApiClient {
      * @param locationId (optional) 
      * @return Success
      */
-    getDoctorLocation(locationId: number | undefined, cancelToken?: CancelToken | undefined): Promise<PersonAddressResponse> {
+    getDoctorLocation(locationId: string | undefined, cancelToken?: CancelToken | undefined): Promise<PersonAddressResponse> {
         let url_ = this.baseUrl + "/api/Doctors/GetDoctorLocation?";
         if (locationId === null)
             throw new Error("The parameter 'locationId' cannot be null.");
@@ -248,12 +994,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetDoctorLocation(_response);
         });
     }
 
-    protected processGetDoctorLocation(response: AxiosResponse): Promise<PersonAddressResponse> {
+    protected processGetDoctorLocation(response: AxiosResponse<string>): Promise<PersonAddressResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -268,7 +1014,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonAddressResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonAddressResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -291,7 +1037,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -303,12 +1049,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdateDoctor(_response);
         });
     }
 
-    protected processUpdateDoctor(response: AxiosResponse): Promise<Response> {
+    protected processUpdateDoctor(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -323,7 +1069,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -353,12 +1099,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processNewDoctor(_response);
         });
     }
 
-    protected processNewDoctor(response: AxiosResponse): Promise<PersonResponse> {
+    protected processNewDoctor(response: AxiosResponse<string>): Promise<PersonResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -373,7 +1119,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -396,7 +1142,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -408,12 +1154,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddDoctor(_response);
         });
     }
 
-    protected processAddDoctor(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddDoctor(response: AxiosResponse<string>): Promise<Int32Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -428,7 +1174,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Int32Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -451,7 +1197,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -463,12 +1209,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdateDoctorLocation(_response);
         });
     }
 
-    protected processUpdateDoctorLocation(response: AxiosResponse): Promise<Response> {
+    protected processUpdateDoctorLocation(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -483,7 +1229,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -492,10 +1238,65 @@ export class DiaRegWebApiClient {
     }
 
     /**
+     * @param personId (optional) 
+     * @return Success
+     */
+    createNewDoctorLocation(personId: string | undefined, cancelToken?: CancelToken | undefined): Promise<PersonAddressResponse> {
+        let url_ = this.baseUrl + "/api/Doctors/CreateNewDoctorLocation?";
+        if (personId === null)
+            throw new Error("The parameter 'personId' cannot be null.");
+        else if (personId !== undefined)
+            url_ += "personId=" + encodeURIComponent("" + personId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processCreateNewDoctorLocation(_response);
+        });
+    }
+
+    protected processCreateNewDoctorLocation(response: AxiosResponse<string>): Promise<PersonAddressResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = PersonAddressResponse.fromJS(resultData200);
+            return Promise.resolve<PersonAddressResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PersonAddressResponse>(<any>null);
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
-    addDoctorLocation(body: PersonAddress | undefined, cancelToken?: CancelToken | undefined): Promise<Int32Response> {
+    addDoctorLocation(body: PersonAddress | undefined, cancelToken?: CancelToken | undefined): Promise<StringResponse> {
         let url_ = this.baseUrl + "/api/Doctors/AddDoctorLocation";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -506,7 +1307,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -518,12 +1319,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddDoctorLocation(_response);
         });
     }
 
-    protected processAddDoctorLocation(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddDoctorLocation(response: AxiosResponse<string>): Promise<StringResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -537,31 +1338,31 @@ export class DiaRegWebApiClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200 = _responseText;
-            result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            result200 = StringResponse.fromJS(resultData200);
+            return Promise.resolve<StringResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<Int32Response>(<any>null);
+        return Promise.resolve<StringResponse>(<any>null);
     }
 
     /**
-     * @param body (optional) 
+     * @param addressId (optional) 
      * @return Success
      */
-    deleteDoctorLocation(body: number | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
-        let url_ = this.baseUrl + "/api/Doctors/DeleteDoctorLocation";
+    deleteDoctorLocation(addressId: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Doctors/DeleteDoctorLocation?";
+        if (addressId === null)
+            throw new Error("The parameter 'addressId' cannot be null.");
+        else if (addressId !== undefined)
+            url_ += "addressId=" + encodeURIComponent("" + addressId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_ = <AxiosRequestConfig>{
-            data: content_,
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -573,12 +1374,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processDeleteDoctorLocation(_response);
         });
     }
 
-    protected processDeleteDoctorLocation(response: AxiosResponse): Promise<Response> {
+    protected processDeleteDoctorLocation(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -593,7 +1394,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -602,21 +1403,21 @@ export class DiaRegWebApiClient {
     }
 
     /**
-     * @param body (optional) 
+     * @param id (optional) 
      * @return Success
      */
-    deleteDoctor(body: number | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
-        let url_ = this.baseUrl + "/api/Doctors/DeleteDoctor";
+    deleteDoctor(id: string | undefined, cancelToken?: CancelToken | undefined): Promise<Response> {
+        let url_ = this.baseUrl + "/api/Doctors/DeleteDoctor?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_ = <AxiosRequestConfig>{
-            data: content_,
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -628,12 +1429,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processDeleteDoctor(_response);
         });
     }
 
-    protected processDeleteDoctor(response: AxiosResponse): Promise<Response> {
+    protected processDeleteDoctor(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -648,12 +1449,67 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<Response>(<any>null);
+    }
+
+    /**
+     * @param searchString (optional) 
+     * @return Success
+     */
+    searchPatientByName(searchString: string | undefined, cancelToken?: CancelToken | undefined): Promise<PatientListResponse> {
+        let url_ = this.baseUrl + "/api/Patients/SearchPatientByName?";
+        if (searchString === null)
+            throw new Error("The parameter 'searchString' cannot be null.");
+        else if (searchString !== undefined)
+            url_ += "searchString=" + encodeURIComponent("" + searchString) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processSearchPatientByName(_response);
+        });
+    }
+
+    protected processSearchPatientByName(response: AxiosResponse<string>): Promise<PatientListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = PatientListResponse.fromJS(resultData200);
+            return Promise.resolve<PatientListResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PatientListResponse>(<any>null);
     }
 
     /**
@@ -671,7 +1527,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -683,12 +1539,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatients(_response);
         });
     }
 
-    protected processGetPatients(response: AxiosResponse): Promise<PatientPagedResponse> {
+    protected processGetPatients(response: AxiosResponse<string>): Promise<PatientPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -703,7 +1559,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PatientPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PatientPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -738,12 +1594,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatient(_response);
         });
     }
 
-    protected processGetPatient(response: AxiosResponse): Promise<PatientResponse> {
+    protected processGetPatient(response: AxiosResponse<string>): Promise<PatientResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -758,7 +1614,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PatientResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PatientResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -781,7 +1637,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -793,12 +1649,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdatePatient(_response);
         });
     }
 
-    protected processUpdatePatient(response: AxiosResponse): Promise<Response> {
+    protected processUpdatePatient(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -813,7 +1669,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -836,7 +1692,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -848,12 +1704,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddPatient(_response);
         });
     }
 
-    protected processAddPatient(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddPatient(response: AxiosResponse<string>): Promise<Int32Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -868,7 +1724,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Int32Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -903,12 +1759,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetVisits(_response);
         });
     }
 
-    protected processGetVisits(response: AxiosResponse): Promise<VisitPagedResponse> {
+    protected processGetVisits(response: AxiosResponse<string>): Promise<VisitPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -923,7 +1779,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = VisitPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<VisitPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -958,12 +1814,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetVisit(_response);
         });
     }
 
-    protected processGetVisit(response: AxiosResponse): Promise<VisitResponse> {
+    protected processGetVisit(response: AxiosResponse<string>): Promise<VisitResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -978,7 +1834,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = VisitResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<VisitResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1001,7 +1857,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1013,12 +1869,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdateVisit(_response);
         });
     }
 
-    protected processUpdateVisit(response: AxiosResponse): Promise<Response> {
+    protected processUpdateVisit(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1033,7 +1889,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1056,7 +1912,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1068,12 +1924,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddVisit(_response);
         });
     }
 
-    protected processAddVisit(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddVisit(response: AxiosResponse<string>): Promise<Int32Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1088,7 +1944,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Int32Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1123,12 +1979,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetContacts(_response);
         });
     }
 
-    protected processGetContacts(response: AxiosResponse): Promise<ContactPagedResponse> {
+    protected processGetContacts(response: AxiosResponse<string>): Promise<ContactPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1143,7 +1999,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = ContactPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<ContactPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1178,12 +2034,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetContact(_response);
         });
     }
 
-    protected processGetContact(response: AxiosResponse): Promise<ContactResponse> {
+    protected processGetContact(response: AxiosResponse<string>): Promise<ContactResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1198,7 +2054,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = ContactResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<ContactResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1221,7 +2077,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1233,12 +2089,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdateContact(_response);
         });
     }
 
-    protected processUpdateContact(response: AxiosResponse): Promise<Response> {
+    protected processUpdateContact(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1253,7 +2109,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1276,7 +2132,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1288,12 +2144,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddContact(_response);
         });
     }
 
-    protected processAddContact(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddContact(response: AxiosResponse<string>): Promise<Int32Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1308,7 +2164,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Int32Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1343,12 +2199,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatientSurveys(_response);
         });
     }
 
-    protected processGetPatientSurveys(response: AxiosResponse): Promise<PatientSurveyPagedResponse> {
+    protected processGetPatientSurveys(response: AxiosResponse<string>): Promise<PatientSurveyPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1363,7 +2219,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PatientSurveyPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PatientSurveyPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1398,12 +2254,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatientSurvey(_response);
         });
     }
 
-    protected processGetPatientSurvey(response: AxiosResponse): Promise<StringResponse> {
+    protected processGetPatientSurvey(response: AxiosResponse<string>): Promise<StringResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1418,7 +2274,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = StringResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<StringResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1458,12 +2314,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processUpdatePatientSurvey(_response);
         });
     }
 
-    protected processUpdatePatientSurvey(response: AxiosResponse): Promise<Response> {
+    protected processUpdatePatientSurvey(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1478,7 +2334,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1513,12 +2369,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processCompletePatientSurvey(_response);
         });
     }
 
-    protected processCompletePatientSurvey(response: AxiosResponse): Promise<Response> {
+    protected processCompletePatientSurvey(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1533,7 +2389,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1568,12 +2424,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPersons(_response);
         });
     }
 
-    protected processGetPersons(response: AxiosResponse): Promise<PersonPagedResponse> {
+    protected processGetPersons(response: AxiosResponse<string>): Promise<PersonPagedResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1588,7 +2444,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonPagedResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonPagedResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1623,12 +2479,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPerson(_response);
         });
     }
 
-    protected processGetPerson(response: AxiosResponse): Promise<PersonResponse> {
+    protected processGetPerson(response: AxiosResponse<string>): Promise<PersonResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1643,7 +2499,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1666,7 +2522,7 @@ export class DiaRegWebApiClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1678,12 +2534,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processAddPerson(_response);
         });
     }
 
-    protected processAddPerson(response: AxiosResponse): Promise<Int32Response> {
+    protected processAddPerson(response: AxiosResponse<string>): Promise<Int32Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1698,7 +2554,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Int32Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Int32Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1733,12 +2589,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processDeletePerson(_response);
         });
     }
 
-    protected processDeletePerson(response: AxiosResponse): Promise<Response> {
+    protected processDeletePerson(response: AxiosResponse<string>): Promise<Response> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1753,7 +2609,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = Response.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<Response>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1788,12 +2644,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPersonAddresses(_response);
         });
     }
 
-    protected processGetPersonAddresses(response: AxiosResponse): Promise<PersonAddressListResponse> {
+    protected processGetPersonAddresses(response: AxiosResponse<string>): Promise<PersonAddressListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1808,7 +2664,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PersonAddressListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PersonAddressListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1843,12 +2699,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPersonPhoneNumbers(_response);
         });
     }
 
-    protected processGetPersonPhoneNumbers(response: AxiosResponse): Promise<PhoneNumberListResponse> {
+    protected processGetPersonPhoneNumbers(response: AxiosResponse<string>): Promise<PhoneNumberListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1863,7 +2719,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = PhoneNumberListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<PhoneNumberListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1893,12 +2749,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatientsConfiguration(_response);
         });
     }
 
-    protected processGetPatientsConfiguration(response: AxiosResponse): Promise<StringStringKeyValuePairListResponse> {
+    protected processGetPatientsConfiguration(response: AxiosResponse<string>): Promise<StringStringKeyValuePairListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1913,7 +2769,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = StringStringKeyValuePairListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<StringStringKeyValuePairListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1943,12 +2799,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetDoctorsGridConfiguration(_response);
         });
     }
 
-    protected processGetDoctorsGridConfiguration(response: AxiosResponse): Promise<StringStringKeyValuePairListResponse> {
+    protected processGetDoctorsGridConfiguration(response: AxiosResponse<string>): Promise<StringStringKeyValuePairListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1963,7 +2819,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = StringStringKeyValuePairListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<StringStringKeyValuePairListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1993,12 +2849,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatientGridConfiguration(_response);
         });
     }
 
-    protected processGetPatientGridConfiguration(response: AxiosResponse): Promise<StringStringKeyValuePairListResponse> {
+    protected processGetPatientGridConfiguration(response: AxiosResponse<string>): Promise<StringStringKeyValuePairListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2013,7 +2869,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = StringStringKeyValuePairListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<StringStringKeyValuePairListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2048,12 +2904,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processSearchLocationByCityName(_response);
         });
     }
 
-    protected processSearchLocationByCityName(response: AxiosResponse): Promise<CityListResponse> {
+    protected processSearchLocationByCityName(response: AxiosResponse<string>): Promise<CityListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2068,12 +2924,62 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = CityListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<CityListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<CityListResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    patientsAppointmentGridConfig(cancelToken?: CancelToken | undefined): Promise<StringStringKeyValuePairListResponse> {
+        let url_ = this.baseUrl + "/api/UIHelper/PatientsAppointmentGridConfig";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processPatientsAppointmentGridConfig(_response);
+        });
+    }
+
+    protected processPatientsAppointmentGridConfig(response: AxiosResponse<string>): Promise<StringStringKeyValuePairListResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = StringStringKeyValuePairListResponse.fromJS(resultData200);
+            return Promise.resolve<StringStringKeyValuePairListResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<StringStringKeyValuePairListResponse>(<any>null);
     }
 
     /**
@@ -2098,12 +3004,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetGenders(_response);
         });
     }
 
-    protected processGetGenders(response: AxiosResponse): Promise<GenderArrayResponse> {
+    protected processGetGenders(response: AxiosResponse<string>): Promise<GenderArrayResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2118,7 +3024,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = GenderArrayResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<GenderArrayResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2148,12 +3054,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetRegions(_response);
         });
     }
 
-    protected processGetRegions(response: AxiosResponse): Promise<RegionArrayResponse> {
+    protected processGetRegions(response: AxiosResponse<string>): Promise<RegionArrayResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2168,7 +3074,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = RegionArrayResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<RegionArrayResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2180,7 +3086,7 @@ export class DiaRegWebApiClient {
      * @param regionId (optional) 
      * @return Success
      */
-    getCities(regionId: number | undefined, cancelToken?: CancelToken | undefined): Promise<CityArrayResponse> {
+    getCities(regionId: string | undefined, cancelToken?: CancelToken | undefined): Promise<CityArrayResponse> {
         let url_ = this.baseUrl + "/api/Values/GetCities?";
         if (regionId === null)
             throw new Error("The parameter 'regionId' cannot be null.");
@@ -2203,12 +3109,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetCities(_response);
         });
     }
 
-    protected processGetCities(response: AxiosResponse): Promise<CityArrayResponse> {
+    protected processGetCities(response: AxiosResponse<string>): Promise<CityArrayResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2223,7 +3129,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = CityArrayResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<CityArrayResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2253,12 +3159,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetAddressTypes(_response);
         });
     }
 
-    protected processGetAddressTypes(response: AxiosResponse): Promise<AddressTypeListResponse> {
+    protected processGetAddressTypes(response: AxiosResponse<string>): Promise<AddressTypeListResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2273,7 +3179,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = AddressTypeListResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<AddressTypeListResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2284,8 +3190,8 @@ export class DiaRegWebApiClient {
     /**
      * @return Success
      */
-    getVisitTypes(cancelToken?: CancelToken | undefined): Promise<VisitTypeArrayResponse> {
-        let url_ = this.baseUrl + "/api/Values/GetVisitTypes";
+    getAppointmentTypes(cancelToken?: CancelToken | undefined): Promise<AppointmentTypeArrayResponse> {
+        let url_ = this.baseUrl + "/api/Values/GetAppointmentTypes";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -2303,12 +3209,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetVisitTypes(_response);
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetAppointmentTypes(_response);
         });
     }
 
-    protected processGetVisitTypes(response: AxiosResponse): Promise<VisitTypeArrayResponse> {
+    protected processGetAppointmentTypes(response: AxiosResponse<string>): Promise<AppointmentTypeArrayResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2322,13 +3228,13 @@ export class DiaRegWebApiClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200 = _responseText;
-            result200 = VisitTypeArrayResponse.fromJS(resultData200);
-            return result200;
+            result200 = AppointmentTypeArrayResponse.fromJS(resultData200);
+            return Promise.resolve<AppointmentTypeArrayResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<VisitTypeArrayResponse>(<any>null);
+        return Promise.resolve<AppointmentTypeArrayResponse>(<any>null);
     }
 
     /**
@@ -2353,12 +3259,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetPatientContactTypes(_response);
         });
     }
 
-    protected processGetPatientContactTypes(response: AxiosResponse): Promise<ContactTypeArrayResponse> {
+    protected processGetPatientContactTypes(response: AxiosResponse<string>): Promise<ContactTypeArrayResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2373,7 +3279,7 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = ContactTypeArrayResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<ContactTypeArrayResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2385,7 +3291,7 @@ export class DiaRegWebApiClient {
      * @param cityId (optional) 
      * @return Success
      */
-    getLocationByCityId(cityId: number | undefined, cancelToken?: CancelToken | undefined): Promise<LocationResponse> {
+    getLocationByCityId(cityId: string | undefined, cancelToken?: CancelToken | undefined): Promise<LocationResponse> {
         let url_ = this.baseUrl + "/api/Values/GetLocationByCityId?";
         if (cityId === null)
             throw new Error("The parameter 'cityId' cannot be null.");
@@ -2408,12 +3314,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processGetLocationByCityId(_response);
         });
     }
 
-    protected processGetLocationByCityId(response: AxiosResponse): Promise<LocationResponse> {
+    protected processGetLocationByCityId(response: AxiosResponse<string>): Promise<LocationResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2428,12 +3334,213 @@ export class DiaRegWebApiClient {
             let result200: any = null;
             let resultData200 = _responseText;
             result200 = LocationResponse.fromJS(resultData200);
-            return result200;
+            return Promise.resolve<LocationResponse>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<LocationResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAppointmentStatues(cancelToken?: CancelToken | undefined): Promise<AppointmentStatusArrayResponse> {
+        let url_ = this.baseUrl + "/api/Values/GetAppointmentStatues";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetAppointmentStatues(_response);
+        });
+    }
+
+    protected processGetAppointmentStatues(response: AxiosResponse<string>): Promise<AppointmentStatusArrayResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = AppointmentStatusArrayResponse.fromJS(resultData200);
+            return Promise.resolve<AppointmentStatusArrayResponse>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentStatusArrayResponse>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getDateTime(cancelToken?: CancelToken | undefined): Promise<Date> {
+        let url_ = this.baseUrl + "/api/Values/GetDateTime";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetDateTime(_response);
+        });
+    }
+
+    protected processGetDateTime(response: AxiosResponse<string>): Promise<Date> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = resultData200 ? new Date(resultData200.toString()) : <any>null;
+            return Promise.resolve<Date>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Date>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    takeSomeNumber(id: string | undefined, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Values/TakeSomeNumber?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processTakeSomeNumber(_response);
+        });
+    }
+
+    protected processTakeSomeNumber(response: AxiosResponse<string>): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getSomeNumber(cancelToken?: CancelToken | undefined): Promise<BaseItem> {
+        let url_ = this.baseUrl + "/api/Values/GetSomeNumber";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse<string>) => {
+            return this.processGetSomeNumber(_response);
+        });
+    }
+
+    protected processGetSomeNumber(response: AxiosResponse<string>): Promise<BaseItem> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200 = _responseText;
+            result200 = BaseItem.fromJS(resultData200);
+            return Promise.resolve<BaseItem>(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<BaseItem>(<any>null);
     }
 
     /**
@@ -2458,12 +3565,12 @@ export class DiaRegWebApiClient {
             } else {
                 throw _error;
             }
-        }).then((_response: AxiosResponse) => {
+        }).then((_response: AxiosResponse<string>) => {
             return this.processWeatherForecast(_response);
         });
     }
 
-    protected processWeatherForecast(response: AxiosResponse): Promise<WeatherForecast[]> {
+    protected processWeatherForecast(response: AxiosResponse<string>): Promise<WeatherForecast[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2485,7 +3592,7 @@ export class DiaRegWebApiClient {
             else {
                 result200 = <any>null;
             }
-            return result200;
+            return Promise.resolve<WeatherForecast[]>(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2539,9 +3646,10 @@ export interface IAddressType {
 }
 
 export class AddressTypeListResponse implements IAddressTypeListResponse {
+    data!: AddressType[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: AddressType[] | null;
 
     constructor(data?: IAddressTypeListResponse) {
         if (data) {
@@ -2554,8 +3662,6 @@ export class AddressTypeListResponse implements IAddressTypeListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -2564,6 +3670,9 @@ export class AddressTypeListResponse implements IAddressTypeListResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -2576,31 +3685,442 @@ export class AddressTypeListResponse implements IAddressTypeListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IAddressTypeListResponse {
+    data: AddressType[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: AddressType[] | null;
+}
+
+export class Appointment implements IAppointment {
+    patient!: Patient;
+    doctor!: Person;
+    appointmentStartDate!: Date;
+    appointmentEndDate!: Date;
+    appointmentType!: AppointmentType;
+    appointmentAddress!: PersonAddress;
+    appointmentStatus!: AppointmentStatus;
+    readonly appointmentStatusDate!: Date;
+    notes!: string | null;
+    confirmedDate!: Date | null;
+    confirmedBy!: string | null;
+    checkedInDate!: Date | null;
+    checkedInBy!: string | null;
+    auditInfo!: AuditInfo;
+    id!: string;
+    active!: boolean;
+
+    constructor(data?: IAppointment) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.patient = _data["patient"] ? Patient.fromJS(_data["patient"]) : <any>null;
+            this.doctor = _data["doctor"] ? Person.fromJS(_data["doctor"]) : <any>null;
+            this.appointmentStartDate = _data["appointmentStartDate"] ? new Date(_data["appointmentStartDate"].toString()) : <any>null;
+            this.appointmentEndDate = _data["appointmentEndDate"] ? new Date(_data["appointmentEndDate"].toString()) : <any>null;
+            this.appointmentType = _data["appointmentType"] ? AppointmentType.fromJS(_data["appointmentType"]) : <any>null;
+            this.appointmentAddress = _data["appointmentAddress"] ? PersonAddress.fromJS(_data["appointmentAddress"]) : <any>null;
+            this.appointmentStatus = _data["appointmentStatus"] ? AppointmentStatus.fromJS(_data["appointmentStatus"]) : <any>null;
+            (<any>this).appointmentStatusDate = _data["appointmentStatusDate"] ? new Date(_data["appointmentStatusDate"].toString()) : <any>null;
+            this.notes = _data["notes"] !== undefined ? _data["notes"] : <any>null;
+            this.confirmedDate = _data["confirmedDate"] ? new Date(_data["confirmedDate"].toString()) : <any>null;
+            this.confirmedBy = _data["confirmedBy"] !== undefined ? _data["confirmedBy"] : <any>null;
+            this.checkedInDate = _data["checkedInDate"] ? new Date(_data["checkedInDate"].toString()) : <any>null;
+            this.checkedInBy = _data["checkedInBy"] !== undefined ? _data["checkedInBy"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): Appointment {
+        data = typeof data === 'object' ? data : {};
+        let result = new Appointment();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["patient"] = this.patient ? this.patient.toJSON() : <any>null;
+        data["doctor"] = this.doctor ? this.doctor.toJSON() : <any>null;
+        data["appointmentStartDate"] = this.appointmentStartDate ? this.appointmentStartDate.toISOString() : <any>null;
+        data["appointmentEndDate"] = this.appointmentEndDate ? this.appointmentEndDate.toISOString() : <any>null;
+        data["appointmentType"] = this.appointmentType ? this.appointmentType.toJSON() : <any>null;
+        data["appointmentAddress"] = this.appointmentAddress ? this.appointmentAddress.toJSON() : <any>null;
+        data["appointmentStatus"] = this.appointmentStatus ? this.appointmentStatus.toJSON() : <any>null;
+        data["appointmentStatusDate"] = this.appointmentStatusDate ? this.appointmentStatusDate.toISOString() : <any>null;
+        data["notes"] = this.notes !== undefined ? this.notes : <any>null;
+        data["confirmedDate"] = this.confirmedDate ? this.confirmedDate.toISOString() : <any>null;
+        data["confirmedBy"] = this.confirmedBy !== undefined ? this.confirmedBy : <any>null;
+        data["checkedInDate"] = this.checkedInDate ? this.checkedInDate.toISOString() : <any>null;
+        data["checkedInBy"] = this.checkedInBy !== undefined ? this.checkedInBy : <any>null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointment {
+    patient: Patient;
+    doctor: Person;
+    appointmentStartDate: Date;
+    appointmentEndDate: Date;
+    appointmentType: AppointmentType;
+    appointmentAddress: PersonAddress;
+    appointmentStatus: AppointmentStatus;
+    appointmentStatusDate: Date;
+    notes: string | null;
+    confirmedDate: Date | null;
+    confirmedBy: string | null;
+    checkedInDate: Date | null;
+    checkedInBy: string | null;
+    auditInfo: AuditInfo;
+    id: string;
+    active: boolean;
+}
+
+export class AppointmentListResponse implements IAppointmentListResponse {
+    data!: Appointment[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IAppointmentListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(Appointment.fromJS(item));
+            }
+            else {
+                this.data = <any>null;
+            }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentListResponse {
+    data: Appointment[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
+}
+
+export class AppointmentResponse implements IAppointmentResponse {
+    data!: Appointment;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IAppointmentResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? Appointment.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentResponse {
+    data: Appointment;
+    code: string | null;
+    status: string | null;
+    message: string | null;
+}
+
+export class AppointmentStatus implements IAppointmentStatus {
+    id!: number;
+    name!: string | null;
+    active!: boolean;
+
+    constructor(data?: IAppointmentStatus) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentStatus {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentStatus();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentStatus {
+    id: number;
+    name: string | null;
+    active: boolean;
+}
+
+export class AppointmentStatusArrayResponse implements IAppointmentStatusArrayResponse {
+    data!: AppointmentStatus[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IAppointmentStatusArrayResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(AppointmentStatus.fromJS(item));
+            }
+            else {
+                this.data = <any>null;
+            }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentStatusArrayResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentStatusArrayResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentStatusArrayResponse {
+    data: AppointmentStatus[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
+}
+
+export class AppointmentType implements IAppointmentType {
+    id!: number;
+    name!: string | null;
+    active!: boolean;
+
+    constructor(data?: IAppointmentType) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentType {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentType();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentType {
+    id: number;
+    name: string | null;
+    active: boolean;
+}
+
+export class AppointmentTypeArrayResponse implements IAppointmentTypeArrayResponse {
+    data!: AppointmentType[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IAppointmentTypeArrayResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(AppointmentType.fromJS(item));
+            }
+            else {
+                this.data = <any>null;
+            }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AppointmentTypeArrayResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppointmentTypeArrayResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IAppointmentTypeArrayResponse {
+    data: AppointmentType[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class AuditInfo implements IAuditInfo {
-    createdDate!: Date;
-    createdBy!: string | null;
-    lastUpdateDate!: Date;
-    lastUpdatedBy!: string | null;
-    deletedDate!: Date;
-    deletedBy!: string | null;
-    deleted!: boolean;
+    readonly createdDate!: Date;
+    readonly createdBy!: string | null;
+    readonly lastUpdatedDate!: Date;
+    readonly lastUpdatedBy!: string | null;
+    readonly deletedDate!: Date | null;
+    readonly deletedBy!: string | null;
+    readonly deleted!: boolean;
 
     constructor(data?: IAuditInfo) {
         if (data) {
@@ -2613,13 +4133,13 @@ export class AuditInfo implements IAuditInfo {
 
     init(_data?: any) {
         if (_data) {
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>null;
-            this.createdBy = _data["createdBy"] !== undefined ? _data["createdBy"] : <any>null;
-            this.lastUpdateDate = _data["lastUpdateDate"] ? new Date(_data["lastUpdateDate"].toString()) : <any>null;
-            this.lastUpdatedBy = _data["lastUpdatedBy"] !== undefined ? _data["lastUpdatedBy"] : <any>null;
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>null;
-            this.deletedBy = _data["deletedBy"] !== undefined ? _data["deletedBy"] : <any>null;
-            this.deleted = _data["deleted"] !== undefined ? _data["deleted"] : <any>null;
+            (<any>this).createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>null;
+            (<any>this).createdBy = _data["createdBy"] !== undefined ? _data["createdBy"] : <any>null;
+            (<any>this).lastUpdatedDate = _data["lastUpdatedDate"] ? new Date(_data["lastUpdatedDate"].toString()) : <any>null;
+            (<any>this).lastUpdatedBy = _data["lastUpdatedBy"] !== undefined ? _data["lastUpdatedBy"] : <any>null;
+            (<any>this).deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>null;
+            (<any>this).deletedBy = _data["deletedBy"] !== undefined ? _data["deletedBy"] : <any>null;
+            (<any>this).deleted = _data["deleted"] !== undefined ? _data["deleted"] : <any>null;
         }
     }
 
@@ -2634,7 +4154,7 @@ export class AuditInfo implements IAuditInfo {
         data = typeof data === 'object' ? data : {};
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>null;
         data["createdBy"] = this.createdBy !== undefined ? this.createdBy : <any>null;
-        data["lastUpdateDate"] = this.lastUpdateDate ? this.lastUpdateDate.toISOString() : <any>null;
+        data["lastUpdatedDate"] = this.lastUpdatedDate ? this.lastUpdatedDate.toISOString() : <any>null;
         data["lastUpdatedBy"] = this.lastUpdatedBy !== undefined ? this.lastUpdatedBy : <any>null;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>null;
         data["deletedBy"] = this.deletedBy !== undefined ? this.deletedBy : <any>null;
@@ -2646,18 +4166,58 @@ export class AuditInfo implements IAuditInfo {
 export interface IAuditInfo {
     createdDate: Date;
     createdBy: string | null;
-    lastUpdateDate: Date;
+    lastUpdatedDate: Date;
     lastUpdatedBy: string | null;
-    deletedDate: Date;
+    deletedDate: Date | null;
     deletedBy: string | null;
     deleted: boolean;
 }
 
+export class BaseItem implements IBaseItem {
+    id!: string;
+    active!: boolean;
+
+    constructor(data?: IBaseItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): BaseItem {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseItem();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        return data;
+    }
+}
+
+export interface IBaseItem {
+    id: string;
+    active: boolean;
+}
+
 export class City implements ICity {
-    id!: number;
+    id!: string | null;
+    regionId!: string | null;
     name!: string | null;
     active!: boolean;
-    regionId!: number;
 
     constructor(data?: ICity) {
         if (data) {
@@ -2671,9 +4231,9 @@ export class City implements ICity {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.regionId = _data["regionId"] !== undefined ? _data["regionId"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-            this.regionId = _data["regionId"] !== undefined ? _data["regionId"] : <any>null;
         }
     }
 
@@ -2687,24 +4247,25 @@ export class City implements ICity {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["regionId"] = this.regionId !== undefined ? this.regionId : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["active"] = this.active !== undefined ? this.active : <any>null;
-        data["regionId"] = this.regionId !== undefined ? this.regionId : <any>null;
         return data;
     }
 }
 
 export interface ICity {
-    id: number;
+    id: string | null;
+    regionId: string | null;
     name: string | null;
     active: boolean;
-    regionId: number;
 }
 
 export class CityArrayResponse implements ICityArrayResponse {
+    data!: City[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: City[] | null;
 
     constructor(data?: ICityArrayResponse) {
         if (data) {
@@ -2717,8 +4278,6 @@ export class CityArrayResponse implements ICityArrayResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -2727,6 +4286,9 @@ export class CityArrayResponse implements ICityArrayResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -2739,27 +4301,30 @@ export class CityArrayResponse implements ICityArrayResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface ICityArrayResponse {
+    data: City[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: City[] | null;
 }
 
 export class CityListResponse implements ICityListResponse {
+    data!: City[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: City[] | null;
 
     constructor(data?: ICityListResponse) {
         if (data) {
@@ -2772,8 +4337,6 @@ export class CityListResponse implements ICityListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -2782,6 +4345,9 @@ export class CityListResponse implements ICityListResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -2794,25 +4360,31 @@ export class CityListResponse implements ICityListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface ICityListResponse {
+    data: City[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: City[] | null;
 }
 
 export class Contact implements IContact {
-    id!: number;
+    patientId!: number;
+    contactType!: ContactType;
+    contactTypeId!: number;
+    otherContact!: string | null;
+    id!: string | null;
     firstName!: string | null;
     lastName!: string | null;
     emailAddress!: string | null;
@@ -2826,10 +4398,8 @@ export class Contact implements IContact {
     homePhone!: string | null;
     gender!: Gender;
     active!: boolean;
-    patientId!: number;
-    contactType!: ContactType;
-    contactTypeId!: number;
-    otherContact!: string | null;
+    auditInfo!: AuditInfo;
+    readonly displayName!: string | null;
 
     constructor(data?: IContact) {
         if (data) {
@@ -2842,6 +4412,10 @@ export class Contact implements IContact {
 
     init(_data?: any) {
         if (_data) {
+            this.patientId = _data["patientId"] !== undefined ? _data["patientId"] : <any>null;
+            this.contactType = _data["contactType"] ? ContactType.fromJS(_data["contactType"]) : <any>null;
+            this.contactTypeId = _data["contactTypeId"] !== undefined ? _data["contactTypeId"] : <any>null;
+            this.otherContact = _data["otherContact"] !== undefined ? _data["otherContact"] : <any>null;
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
             this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
@@ -2856,10 +4430,8 @@ export class Contact implements IContact {
             this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : <any>null;
             this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : <any>null;
             this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-            this.patientId = _data["patientId"] !== undefined ? _data["patientId"] : <any>null;
-            this.contactType = _data["contactType"] ? ContactType.fromJS(_data["contactType"]) : <any>null;
-            this.contactTypeId = _data["contactTypeId"] !== undefined ? _data["contactTypeId"] : <any>null;
-            this.otherContact = _data["otherContact"] !== undefined ? _data["otherContact"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            (<any>this).displayName = _data["displayName"] !== undefined ? _data["displayName"] : <any>null;
         }
     }
 
@@ -2872,6 +4444,10 @@ export class Contact implements IContact {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["patientId"] = this.patientId !== undefined ? this.patientId : <any>null;
+        data["contactType"] = this.contactType ? this.contactType.toJSON() : <any>null;
+        data["contactTypeId"] = this.contactTypeId !== undefined ? this.contactTypeId : <any>null;
+        data["otherContact"] = this.otherContact !== undefined ? this.otherContact : <any>null;
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
@@ -2886,16 +4462,18 @@ export class Contact implements IContact {
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : <any>null;
         data["gender"] = this.gender ? this.gender.toJSON() : <any>null;
         data["active"] = this.active !== undefined ? this.active : <any>null;
-        data["patientId"] = this.patientId !== undefined ? this.patientId : <any>null;
-        data["contactType"] = this.contactType ? this.contactType.toJSON() : <any>null;
-        data["contactTypeId"] = this.contactTypeId !== undefined ? this.contactTypeId : <any>null;
-        data["otherContact"] = this.otherContact !== undefined ? this.otherContact : <any>null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : <any>null;
         return data;
     }
 }
 
 export interface IContact {
-    id: number;
+    patientId: number;
+    contactType: ContactType;
+    contactTypeId: number;
+    otherContact: string | null;
+    id: string | null;
     firstName: string | null;
     lastName: string | null;
     emailAddress: string | null;
@@ -2909,20 +4487,19 @@ export interface IContact {
     homePhone: string | null;
     gender: Gender;
     active: boolean;
-    patientId: number;
-    contactType: ContactType;
-    contactTypeId: number;
-    otherContact: string | null;
+    auditInfo: AuditInfo;
+    displayName: string | null;
 }
 
 export class ContactPagedResponse implements IContactPagedResponse {
-    status!: string | null;
-    message!: string | null;
     currentPage!: number;
     pageCount!: number;
     pageSize!: number;
     rowCount!: number;
     data!: Contact[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
 
     constructor(data?: IContactPagedResponse) {
         if (data) {
@@ -2935,8 +4512,6 @@ export class ContactPagedResponse implements IContactPagedResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : <any>null;
             this.pageCount = _data["pageCount"] !== undefined ? _data["pageCount"] : <any>null;
             this.pageSize = _data["pageSize"] !== undefined ? _data["pageSize"] : <any>null;
@@ -2949,6 +4524,9 @@ export class ContactPagedResponse implements IContactPagedResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -2961,8 +4539,6 @@ export class ContactPagedResponse implements IContactPagedResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : <any>null;
         data["pageCount"] = this.pageCount !== undefined ? this.pageCount : <any>null;
         data["pageSize"] = this.pageSize !== undefined ? this.pageSize : <any>null;
@@ -2972,24 +4548,29 @@ export class ContactPagedResponse implements IContactPagedResponse {
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IContactPagedResponse {
-    status: string | null;
-    message: string | null;
     currentPage: number;
     pageCount: number;
     pageSize: number;
     rowCount: number;
     data: Contact[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class ContactResponse implements IContactResponse {
+    data!: Contact;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Contact;
 
     constructor(data?: IContactResponse) {
         if (data) {
@@ -3002,9 +4583,10 @@ export class ContactResponse implements IContactResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? Contact.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? Contact.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -3017,17 +4599,19 @@ export class ContactResponse implements IContactResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface IContactResponse {
+    data: Contact;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Contact;
 }
 
 export class ContactType implements IContactType {
@@ -3075,9 +4659,10 @@ export interface IContactType {
 }
 
 export class ContactTypeArrayResponse implements IContactTypeArrayResponse {
+    data!: ContactType[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: ContactType[] | null;
 
     constructor(data?: IContactTypeArrayResponse) {
         if (data) {
@@ -3090,8 +4675,6 @@ export class ContactTypeArrayResponse implements IContactTypeArrayResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -3100,6 +4683,9 @@ export class ContactTypeArrayResponse implements IContactTypeArrayResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -3112,25 +4698,27 @@ export class ContactTypeArrayResponse implements IContactTypeArrayResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IContactTypeArrayResponse {
+    data: ContactType[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: ContactType[] | null;
 }
 
 export class Country implements ICountry {
-    id!: number;
+    id!: string | null;
     name!: string | null;
     active!: boolean;
 
@@ -3168,9 +4756,202 @@ export class Country implements ICountry {
 }
 
 export interface ICountry {
-    id: number;
+    id: string | null;
     name: string | null;
     active: boolean;
+}
+
+export class Doctor implements IDoctor {
+    role!: PersonRole;
+    roles!: PersonRole[] | null;
+    addresses!: PersonAddress[] | null;
+    birthDate!: Date;
+    id!: string | null;
+    firstName!: string | null;
+    lastName!: string | null;
+    emailAddress!: string | null;
+    location!: Location;
+    middleName!: string | null;
+    address1!: string | null;
+    address2!: string | null;
+    title!: string | null;
+    suffix!: string | null;
+    cellPhone!: string | null;
+    homePhone!: string | null;
+    gender!: Gender;
+    active!: boolean;
+    auditInfo!: AuditInfo;
+    readonly displayName!: string | null;
+
+    constructor(data?: IDoctor) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : <any>null;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(PersonRole.fromJS(item));
+            }
+            else {
+                this.roles = <any>null;
+            }
+            if (Array.isArray(_data["addresses"])) {
+                this.addresses = [] as any;
+                for (let item of _data["addresses"])
+                    this.addresses!.push(PersonAddress.fromJS(item));
+            }
+            else {
+                this.addresses = <any>null;
+            }
+            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
+            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
+            this.emailAddress = _data["emailAddress"] !== undefined ? _data["emailAddress"] : <any>null;
+            this.location = _data["location"] ? Location.fromJS(_data["location"]) : <any>null;
+            this.middleName = _data["middleName"] !== undefined ? _data["middleName"] : <any>null;
+            this.address1 = _data["address1"] !== undefined ? _data["address1"] : <any>null;
+            this.address2 = _data["address2"] !== undefined ? _data["address2"] : <any>null;
+            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
+            this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : <any>null;
+            this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : <any>null;
+            this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : <any>null;
+            this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            (<any>this).displayName = _data["displayName"] !== undefined ? _data["displayName"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): Doctor {
+        data = typeof data === 'object' ? data : {};
+        let result = new Doctor();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["role"] = this.role ? this.role.toJSON() : <any>null;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (Array.isArray(this.addresses)) {
+            data["addresses"] = [];
+            for (let item of this.addresses)
+                data["addresses"].push(item.toJSON());
+        }
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
+        data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
+        data["emailAddress"] = this.emailAddress !== undefined ? this.emailAddress : <any>null;
+        data["location"] = this.location ? this.location.toJSON() : <any>null;
+        data["middleName"] = this.middleName !== undefined ? this.middleName : <any>null;
+        data["address1"] = this.address1 !== undefined ? this.address1 : <any>null;
+        data["address2"] = this.address2 !== undefined ? this.address2 : <any>null;
+        data["title"] = this.title !== undefined ? this.title : <any>null;
+        data["suffix"] = this.suffix !== undefined ? this.suffix : <any>null;
+        data["cellPhone"] = this.cellPhone !== undefined ? this.cellPhone : <any>null;
+        data["homePhone"] = this.homePhone !== undefined ? this.homePhone : <any>null;
+        data["gender"] = this.gender ? this.gender.toJSON() : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : <any>null;
+        return data;
+    }
+}
+
+export interface IDoctor {
+    role: PersonRole;
+    roles: PersonRole[] | null;
+    addresses: PersonAddress[] | null;
+    birthDate: Date;
+    id: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    emailAddress: string | null;
+    location: Location;
+    middleName: string | null;
+    address1: string | null;
+    address2: string | null;
+    title: string | null;
+    suffix: string | null;
+    cellPhone: string | null;
+    homePhone: string | null;
+    gender: Gender;
+    active: boolean;
+    auditInfo: AuditInfo;
+    displayName: string | null;
+}
+
+export class DoctorListResponse implements IDoctorListResponse {
+    data!: Doctor[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IDoctorListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(Doctor.fromJS(item));
+            }
+            else {
+                this.data = <any>null;
+            }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): DoctorListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DoctorListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IDoctorListResponse {
+    data: Doctor[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class Gender implements IGender {
@@ -3218,9 +4999,10 @@ export interface IGender {
 }
 
 export class GenderArrayResponse implements IGenderArrayResponse {
+    data!: Gender[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Gender[] | null;
 
     constructor(data?: IGenderArrayResponse) {
         if (data) {
@@ -3233,8 +5015,6 @@ export class GenderArrayResponse implements IGenderArrayResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -3243,6 +5023,9 @@ export class GenderArrayResponse implements IGenderArrayResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -3255,27 +5038,30 @@ export class GenderArrayResponse implements IGenderArrayResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IGenderArrayResponse {
+    data: Gender[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Gender[] | null;
 }
 
 export class Int32Response implements IInt32Response {
+    data!: number;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: number;
 
     constructor(data?: IInt32Response) {
         if (data) {
@@ -3288,9 +5074,10 @@ export class Int32Response implements IInt32Response {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] !== undefined ? _data["data"] : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] !== undefined ? _data["data"] : <any>null;
         }
     }
 
@@ -3303,17 +5090,19 @@ export class Int32Response implements IInt32Response {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data !== undefined ? this.data : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data !== undefined ? this.data : <any>null;
         return data;
     }
 }
 
 export interface IInt32Response {
+    data: number;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: number;
 }
 
 export class ListSearch implements IListSearch {
@@ -3405,9 +5194,10 @@ export interface ILocation {
 }
 
 export class LocationResponse implements ILocationResponse {
+    data!: Location;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Location;
 
     constructor(data?: ILocationResponse) {
         if (data) {
@@ -3420,9 +5210,10 @@ export class LocationResponse implements ILocationResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? Location.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? Location.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -3435,17 +5226,19 @@ export class LocationResponse implements ILocationResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface ILocationResponse {
+    data: Location;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Location;
 }
 
 export class Paging implements IPaging {
@@ -3489,7 +5282,11 @@ export interface IPaging {
 }
 
 export class Patient implements IPatient {
-    id!: number;
+    role!: PersonRole;
+    roles!: PersonRole[] | null;
+    addresses!: PersonAddress[] | null;
+    birthDate!: Date;
+    id!: string | null;
     firstName!: string | null;
     lastName!: string | null;
     emailAddress!: string | null;
@@ -3501,9 +5298,10 @@ export class Patient implements IPatient {
     suffix!: string | null;
     cellPhone!: string | null;
     homePhone!: string | null;
-    active!: boolean;
-    birthDate!: Date;
     gender!: Gender;
+    active!: boolean;
+    auditInfo!: AuditInfo;
+    readonly displayName!: string | null;
 
     constructor(data?: IPatient) {
         if (data) {
@@ -3516,6 +5314,24 @@ export class Patient implements IPatient {
 
     init(_data?: any) {
         if (_data) {
+            this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : <any>null;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(PersonRole.fromJS(item));
+            }
+            else {
+                this.roles = <any>null;
+            }
+            if (Array.isArray(_data["addresses"])) {
+                this.addresses = [] as any;
+                for (let item of _data["addresses"])
+                    this.addresses!.push(PersonAddress.fromJS(item));
+            }
+            else {
+                this.addresses = <any>null;
+            }
+            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>null;
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
             this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
@@ -3528,9 +5344,10 @@ export class Patient implements IPatient {
             this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : <any>null;
             this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : <any>null;
             this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : <any>null;
-            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>null;
             this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            (<any>this).displayName = _data["displayName"] !== undefined ? _data["displayName"] : <any>null;
         }
     }
 
@@ -3543,6 +5360,18 @@ export class Patient implements IPatient {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["role"] = this.role ? this.role.toJSON() : <any>null;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (Array.isArray(this.addresses)) {
+            data["addresses"] = [];
+            for (let item of this.addresses)
+                data["addresses"].push(item.toJSON());
+        }
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>null;
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
@@ -3555,15 +5384,20 @@ export class Patient implements IPatient {
         data["suffix"] = this.suffix !== undefined ? this.suffix : <any>null;
         data["cellPhone"] = this.cellPhone !== undefined ? this.cellPhone : <any>null;
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : <any>null;
-        data["active"] = this.active !== undefined ? this.active : <any>null;
-        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>null;
         data["gender"] = this.gender ? this.gender.toJSON() : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : <any>null;
         return data;
     }
 }
 
 export interface IPatient {
-    id: number;
+    role: PersonRole;
+    roles: PersonRole[] | null;
+    addresses: PersonAddress[] | null;
+    birthDate: Date;
+    id: string | null;
     firstName: string | null;
     lastName: string | null;
     emailAddress: string | null;
@@ -3575,19 +5409,80 @@ export interface IPatient {
     suffix: string | null;
     cellPhone: string | null;
     homePhone: string | null;
-    active: boolean;
-    birthDate: Date;
     gender: Gender;
+    active: boolean;
+    auditInfo: AuditInfo;
+    displayName: string | null;
+}
+
+export class PatientListResponse implements IPatientListResponse {
+    data!: Patient[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
+
+    constructor(data?: IPatientListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(Patient.fromJS(item));
+            }
+            else {
+                this.data = <any>null;
+            }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): PatientListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new PatientListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
+        return data;
+    }
+}
+
+export interface IPatientListResponse {
+    data: Patient[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class PatientPagedResponse implements IPatientPagedResponse {
-    status!: string | null;
-    message!: string | null;
     currentPage!: number;
     pageCount!: number;
     pageSize!: number;
     rowCount!: number;
     data!: Patient[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
 
     constructor(data?: IPatientPagedResponse) {
         if (data) {
@@ -3600,8 +5495,6 @@ export class PatientPagedResponse implements IPatientPagedResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : <any>null;
             this.pageCount = _data["pageCount"] !== undefined ? _data["pageCount"] : <any>null;
             this.pageSize = _data["pageSize"] !== undefined ? _data["pageSize"] : <any>null;
@@ -3614,6 +5507,9 @@ export class PatientPagedResponse implements IPatientPagedResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -3626,8 +5522,6 @@ export class PatientPagedResponse implements IPatientPagedResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : <any>null;
         data["pageCount"] = this.pageCount !== undefined ? this.pageCount : <any>null;
         data["pageSize"] = this.pageSize !== undefined ? this.pageSize : <any>null;
@@ -3637,24 +5531,29 @@ export class PatientPagedResponse implements IPatientPagedResponse {
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IPatientPagedResponse {
-    status: string | null;
-    message: string | null;
     currentPage: number;
     pageCount: number;
     pageSize: number;
     rowCount: number;
     data: Patient[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class PatientResponse implements IPatientResponse {
+    data!: Patient;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Patient;
 
     constructor(data?: IPatientResponse) {
         if (data) {
@@ -3667,9 +5566,10 @@ export class PatientResponse implements IPatientResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? Patient.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? Patient.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -3682,26 +5582,29 @@ export class PatientResponse implements IPatientResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface IPatientResponse {
+    data: Patient;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Patient;
 }
 
 export class PatientSurvey implements IPatientSurvey {
-    patientSurveyId!: number;
     surveyName!: string | null;
     dateAssigned!: Date;
     completedDate!: Date | null;
     completedBy!: string | null;
     status!: PatientSurveyStatus;
+    id!: string;
+    active!: boolean;
 
     constructor(data?: IPatientSurvey) {
         if (data) {
@@ -3714,12 +5617,13 @@ export class PatientSurvey implements IPatientSurvey {
 
     init(_data?: any) {
         if (_data) {
-            this.patientSurveyId = _data["patientSurveyId"] !== undefined ? _data["patientSurveyId"] : <any>null;
             this.surveyName = _data["surveyName"] !== undefined ? _data["surveyName"] : <any>null;
             this.dateAssigned = _data["dateAssigned"] ? new Date(_data["dateAssigned"].toString()) : <any>null;
             this.completedDate = _data["completedDate"] ? new Date(_data["completedDate"].toString()) : <any>null;
             this.completedBy = _data["completedBy"] !== undefined ? _data["completedBy"] : <any>null;
             this.status = _data["status"] ? PatientSurveyStatus.fromJS(_data["status"]) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
         }
     }
 
@@ -3732,33 +5636,36 @@ export class PatientSurvey implements IPatientSurvey {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["patientSurveyId"] = this.patientSurveyId !== undefined ? this.patientSurveyId : <any>null;
         data["surveyName"] = this.surveyName !== undefined ? this.surveyName : <any>null;
         data["dateAssigned"] = this.dateAssigned ? this.dateAssigned.toISOString() : <any>null;
         data["completedDate"] = this.completedDate ? this.completedDate.toISOString() : <any>null;
         data["completedBy"] = this.completedBy !== undefined ? this.completedBy : <any>null;
         data["status"] = this.status ? this.status.toJSON() : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
         return data;
     }
 }
 
 export interface IPatientSurvey {
-    patientSurveyId: number;
     surveyName: string | null;
     dateAssigned: Date;
     completedDate: Date | null;
     completedBy: string | null;
     status: PatientSurveyStatus;
+    id: string;
+    active: boolean;
 }
 
 export class PatientSurveyPagedResponse implements IPatientSurveyPagedResponse {
-    status!: string | null;
-    message!: string | null;
     currentPage!: number;
     pageCount!: number;
     pageSize!: number;
     rowCount!: number;
     data!: PatientSurvey[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
 
     constructor(data?: IPatientSurveyPagedResponse) {
         if (data) {
@@ -3771,8 +5678,6 @@ export class PatientSurveyPagedResponse implements IPatientSurveyPagedResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : <any>null;
             this.pageCount = _data["pageCount"] !== undefined ? _data["pageCount"] : <any>null;
             this.pageSize = _data["pageSize"] !== undefined ? _data["pageSize"] : <any>null;
@@ -3785,6 +5690,9 @@ export class PatientSurveyPagedResponse implements IPatientSurveyPagedResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -3797,8 +5705,6 @@ export class PatientSurveyPagedResponse implements IPatientSurveyPagedResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : <any>null;
         data["pageCount"] = this.pageCount !== undefined ? this.pageCount : <any>null;
         data["pageSize"] = this.pageSize !== undefined ? this.pageSize : <any>null;
@@ -3808,18 +5714,22 @@ export class PatientSurveyPagedResponse implements IPatientSurveyPagedResponse {
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IPatientSurveyPagedResponse {
-    status: string | null;
-    message: string | null;
     currentPage: number;
     pageCount: number;
     pageSize: number;
     rowCount: number;
     data: PatientSurvey[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class PatientSurveyStatus implements IPatientSurveyStatus {
@@ -3867,7 +5777,11 @@ export interface IPatientSurveyStatus {
 }
 
 export class Person implements IPerson {
-    id!: number;
+    role!: PersonRole;
+    roles!: PersonRole[] | null;
+    addresses!: PersonAddress[] | null;
+    birthDate!: Date;
+    id!: string | null;
     firstName!: string | null;
     lastName!: string | null;
     emailAddress!: string | null;
@@ -3881,11 +5795,8 @@ export class Person implements IPerson {
     homePhone!: string | null;
     gender!: Gender;
     active!: boolean;
-    birthDate!: Date;
-    role!: PersonRole;
     auditInfo!: AuditInfo;
-    roles!: PersonRole[] | null;
-    addresses!: PersonAddress[] | null;
+    readonly displayName!: string | null;
 
     constructor(data?: IPerson) {
         if (data) {
@@ -3898,23 +5809,7 @@ export class Person implements IPerson {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
-            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
-            this.emailAddress = _data["emailAddress"] !== undefined ? _data["emailAddress"] : <any>null;
-            this.location = _data["location"] ? Location.fromJS(_data["location"]) : <any>null;
-            this.middleName = _data["middleName"] !== undefined ? _data["middleName"] : <any>null;
-            this.address1 = _data["address1"] !== undefined ? _data["address1"] : <any>null;
-            this.address2 = _data["address2"] !== undefined ? _data["address2"] : <any>null;
-            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
-            this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : <any>null;
-            this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : <any>null;
-            this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : <any>null;
-            this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : <any>null;
-            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>null;
             this.role = _data["role"] ? PersonRole.fromJS(_data["role"]) : <any>null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -3931,6 +5826,23 @@ export class Person implements IPerson {
             else {
                 this.addresses = <any>null;
             }
+            this.birthDate = _data["birthDate"] ? new Date(_data["birthDate"].toString()) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
+            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
+            this.emailAddress = _data["emailAddress"] !== undefined ? _data["emailAddress"] : <any>null;
+            this.location = _data["location"] ? Location.fromJS(_data["location"]) : <any>null;
+            this.middleName = _data["middleName"] !== undefined ? _data["middleName"] : <any>null;
+            this.address1 = _data["address1"] !== undefined ? _data["address1"] : <any>null;
+            this.address2 = _data["address2"] !== undefined ? _data["address2"] : <any>null;
+            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
+            this.suffix = _data["suffix"] !== undefined ? _data["suffix"] : <any>null;
+            this.cellPhone = _data["cellPhone"] !== undefined ? _data["cellPhone"] : <any>null;
+            this.homePhone = _data["homePhone"] !== undefined ? _data["homePhone"] : <any>null;
+            this.gender = _data["gender"] ? Gender.fromJS(_data["gender"]) : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            (<any>this).displayName = _data["displayName"] !== undefined ? _data["displayName"] : <any>null;
         }
     }
 
@@ -3943,6 +5855,18 @@ export class Person implements IPerson {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["role"] = this.role ? this.role.toJSON() : <any>null;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (Array.isArray(this.addresses)) {
+            data["addresses"] = [];
+            for (let item of this.addresses)
+                data["addresses"].push(item.toJSON());
+        }
+        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>null;
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
@@ -3957,25 +5881,18 @@ export class Person implements IPerson {
         data["homePhone"] = this.homePhone !== undefined ? this.homePhone : <any>null;
         data["gender"] = this.gender ? this.gender.toJSON() : <any>null;
         data["active"] = this.active !== undefined ? this.active : <any>null;
-        data["birthDate"] = this.birthDate ? this.birthDate.toISOString() : <any>null;
-        data["role"] = this.role ? this.role.toJSON() : <any>null;
         data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item.toJSON());
-        }
-        if (Array.isArray(this.addresses)) {
-            data["addresses"] = [];
-            for (let item of this.addresses)
-                data["addresses"].push(item.toJSON());
-        }
+        data["displayName"] = this.displayName !== undefined ? this.displayName : <any>null;
         return data;
     }
 }
 
 export interface IPerson {
-    id: number;
+    role: PersonRole;
+    roles: PersonRole[] | null;
+    addresses: PersonAddress[] | null;
+    birthDate: Date;
+    id: string | null;
     firstName: string | null;
     lastName: string | null;
     emailAddress: string | null;
@@ -3989,24 +5906,22 @@ export interface IPerson {
     homePhone: string | null;
     gender: Gender;
     active: boolean;
-    birthDate: Date;
-    role: PersonRole;
     auditInfo: AuditInfo;
-    roles: PersonRole[] | null;
-    addresses: PersonAddress[] | null;
+    displayName: string | null;
 }
 
 export class PersonAddress implements IPersonAddress {
-    id!: number;
+    personId!: string | null;
+    phoneNumber!: string | null;
+    readonly displayName!: string | null;
+    auditInfo!: AuditInfo;
     name!: string | null;
-    active!: boolean;
     location!: Location;
     address1!: string | null;
     address2!: string | null;
     type!: AddressType;
-    personId!: number;
-    auditInfo!: AuditInfo;
-    phoneNumber!: string | null;
+    id!: string;
+    active!: boolean;
 
     constructor(data?: IPersonAddress) {
         if (data) {
@@ -4019,16 +5934,17 @@ export class PersonAddress implements IPersonAddress {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.personId = _data["personId"] !== undefined ? _data["personId"] : <any>null;
+            this.phoneNumber = _data["phoneNumber"] !== undefined ? _data["phoneNumber"] : <any>null;
+            (<any>this).displayName = _data["displayName"] !== undefined ? _data["displayName"] : <any>null;
+            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
             this.location = _data["location"] ? Location.fromJS(_data["location"]) : <any>null;
             this.address1 = _data["address1"] !== undefined ? _data["address1"] : <any>null;
             this.address2 = _data["address2"] !== undefined ? _data["address2"] : <any>null;
             this.type = _data["type"] ? AddressType.fromJS(_data["type"]) : <any>null;
-            this.personId = _data["personId"] !== undefined ? _data["personId"] : <any>null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
-            this.phoneNumber = _data["phoneNumber"] !== undefined ? _data["phoneNumber"] : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
         }
     }
 
@@ -4041,37 +5957,40 @@ export class PersonAddress implements IPersonAddress {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["personId"] = this.personId !== undefined ? this.personId : <any>null;
+        data["phoneNumber"] = this.phoneNumber !== undefined ? this.phoneNumber : <any>null;
+        data["displayName"] = this.displayName !== undefined ? this.displayName : <any>null;
+        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["active"] = this.active !== undefined ? this.active : <any>null;
         data["location"] = this.location ? this.location.toJSON() : <any>null;
         data["address1"] = this.address1 !== undefined ? this.address1 : <any>null;
         data["address2"] = this.address2 !== undefined ? this.address2 : <any>null;
         data["type"] = this.type ? this.type.toJSON() : <any>null;
-        data["personId"] = this.personId !== undefined ? this.personId : <any>null;
-        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
-        data["phoneNumber"] = this.phoneNumber !== undefined ? this.phoneNumber : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
         return data;
     }
 }
 
 export interface IPersonAddress {
-    id: number;
+    personId: string | null;
+    phoneNumber: string | null;
+    displayName: string | null;
+    auditInfo: AuditInfo;
     name: string | null;
-    active: boolean;
     location: Location;
     address1: string | null;
     address2: string | null;
     type: AddressType;
-    personId: number;
-    auditInfo: AuditInfo;
-    phoneNumber: string | null;
+    id: string;
+    active: boolean;
 }
 
 export class PersonAddressListResponse implements IPersonAddressListResponse {
+    data!: PersonAddress[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: PersonAddress[] | null;
 
     constructor(data?: IPersonAddressListResponse) {
         if (data) {
@@ -4084,8 +6003,6 @@ export class PersonAddressListResponse implements IPersonAddressListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -4094,6 +6011,9 @@ export class PersonAddressListResponse implements IPersonAddressListResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4106,27 +6026,30 @@ export class PersonAddressListResponse implements IPersonAddressListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IPersonAddressListResponse {
+    data: PersonAddress[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: PersonAddress[] | null;
 }
 
 export class PersonAddressResponse implements IPersonAddressResponse {
+    data!: PersonAddress;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: PersonAddress;
 
     constructor(data?: IPersonAddressResponse) {
         if (data) {
@@ -4139,9 +6062,10 @@ export class PersonAddressResponse implements IPersonAddressResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? PersonAddress.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? PersonAddress.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -4154,27 +6078,30 @@ export class PersonAddressResponse implements IPersonAddressResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface IPersonAddressResponse {
+    data: PersonAddress;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: PersonAddress;
 }
 
 export class PersonPagedResponse implements IPersonPagedResponse {
-    status!: string | null;
-    message!: string | null;
     currentPage!: number;
     pageCount!: number;
     pageSize!: number;
     rowCount!: number;
     data!: Person[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
 
     constructor(data?: IPersonPagedResponse) {
         if (data) {
@@ -4187,8 +6114,6 @@ export class PersonPagedResponse implements IPersonPagedResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : <any>null;
             this.pageCount = _data["pageCount"] !== undefined ? _data["pageCount"] : <any>null;
             this.pageSize = _data["pageSize"] !== undefined ? _data["pageSize"] : <any>null;
@@ -4201,6 +6126,9 @@ export class PersonPagedResponse implements IPersonPagedResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4213,8 +6141,6 @@ export class PersonPagedResponse implements IPersonPagedResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : <any>null;
         data["pageCount"] = this.pageCount !== undefined ? this.pageCount : <any>null;
         data["pageSize"] = this.pageSize !== undefined ? this.pageSize : <any>null;
@@ -4224,24 +6150,29 @@ export class PersonPagedResponse implements IPersonPagedResponse {
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IPersonPagedResponse {
-    status: string | null;
-    message: string | null;
     currentPage: number;
     pageCount: number;
     pageSize: number;
     rowCount: number;
     data: Person[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class PersonResponse implements IPersonResponse {
+    data!: Person;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Person;
 
     constructor(data?: IPersonResponse) {
         if (data) {
@@ -4254,9 +6185,10 @@ export class PersonResponse implements IPersonResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? Person.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? Person.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -4269,17 +6201,19 @@ export class PersonResponse implements IPersonResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface IPersonResponse {
+    data: Person;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Person;
 }
 
 export class PersonRole implements IPersonRole {
@@ -4327,11 +6261,10 @@ export interface IPersonRole {
 }
 
 export class PhoneNumber implements IPhoneNumber {
-    id!: number;
-    active!: boolean;
     type!: PhoneNumberType;
     phoneNumberValue!: string | null;
-    auditInfo!: AuditInfo;
+    id!: string;
+    active!: boolean;
 
     constructor(data?: IPhoneNumber) {
         if (data) {
@@ -4344,11 +6277,10 @@ export class PhoneNumber implements IPhoneNumber {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
             this.type = _data["type"] ? PhoneNumberType.fromJS(_data["type"]) : <any>null;
             this.phoneNumberValue = _data["phoneNumberValue"] !== undefined ? _data["phoneNumberValue"] : <any>null;
-            this.auditInfo = _data["auditInfo"] ? AuditInfo.fromJS(_data["auditInfo"]) : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
         }
     }
 
@@ -4361,27 +6293,26 @@ export class PhoneNumber implements IPhoneNumber {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["active"] = this.active !== undefined ? this.active : <any>null;
         data["type"] = this.type ? this.type.toJSON() : <any>null;
         data["phoneNumberValue"] = this.phoneNumberValue !== undefined ? this.phoneNumberValue : <any>null;
-        data["auditInfo"] = this.auditInfo ? this.auditInfo.toJSON() : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
         return data;
     }
 }
 
 export interface IPhoneNumber {
-    id: number;
-    active: boolean;
     type: PhoneNumberType;
     phoneNumberValue: string | null;
-    auditInfo: AuditInfo;
+    id: string;
+    active: boolean;
 }
 
 export class PhoneNumberListResponse implements IPhoneNumberListResponse {
+    data!: PhoneNumber[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: PhoneNumber[] | null;
 
     constructor(data?: IPhoneNumberListResponse) {
         if (data) {
@@ -4394,8 +6325,6 @@ export class PhoneNumberListResponse implements IPhoneNumberListResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -4404,6 +6333,9 @@ export class PhoneNumberListResponse implements IPhoneNumberListResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4416,21 +6348,23 @@ export class PhoneNumberListResponse implements IPhoneNumberListResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IPhoneNumberListResponse {
+    data: PhoneNumber[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: PhoneNumber[] | null;
 }
 
 export class PhoneNumberType implements IPhoneNumberType {
@@ -4478,10 +6412,10 @@ export interface IPhoneNumberType {
 }
 
 export class Region implements IRegion {
-    id!: number;
+    id!: string | null;
+    countryId!: string | null;
     name!: string | null;
     active!: boolean;
-    countryId!: number;
 
     constructor(data?: IRegion) {
         if (data) {
@@ -4495,9 +6429,9 @@ export class Region implements IRegion {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.countryId = _data["countryId"] !== undefined ? _data["countryId"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-            this.countryId = _data["countryId"] !== undefined ? _data["countryId"] : <any>null;
         }
     }
 
@@ -4511,24 +6445,25 @@ export class Region implements IRegion {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["countryId"] = this.countryId !== undefined ? this.countryId : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["active"] = this.active !== undefined ? this.active : <any>null;
-        data["countryId"] = this.countryId !== undefined ? this.countryId : <any>null;
         return data;
     }
 }
 
 export interface IRegion {
-    id: number;
+    id: string | null;
+    countryId: string | null;
     name: string | null;
     active: boolean;
-    countryId: number;
 }
 
 export class RegionArrayResponse implements IRegionArrayResponse {
+    data!: Region[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Region[] | null;
 
     constructor(data?: IRegionArrayResponse) {
         if (data) {
@@ -4541,8 +6476,6 @@ export class RegionArrayResponse implements IRegionArrayResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -4551,6 +6484,9 @@ export class RegionArrayResponse implements IRegionArrayResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4563,24 +6499,27 @@ export class RegionArrayResponse implements IRegionArrayResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IRegionArrayResponse {
+    data: Region[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: Region[] | null;
 }
 
 export class Response implements IResponse {
+    code!: string | null;
     status!: string | null;
     message!: string | null;
 
@@ -4595,6 +6534,7 @@ export class Response implements IResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
@@ -4609,6 +6549,7 @@ export class Response implements IResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
@@ -4616,14 +6557,16 @@ export class Response implements IResponse {
 }
 
 export interface IResponse {
+    code: string | null;
     status: string | null;
     message: string | null;
 }
 
 export class StringResponse implements IStringResponse {
+    data!: string | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: string | null;
 
     constructor(data?: IStringResponse) {
         if (data) {
@@ -4636,9 +6579,10 @@ export class StringResponse implements IStringResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] !== undefined ? _data["data"] : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] !== undefined ? _data["data"] : <any>null;
         }
     }
 
@@ -4651,22 +6595,24 @@ export class StringResponse implements IStringResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data !== undefined ? this.data : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data !== undefined ? this.data : <any>null;
         return data;
     }
 }
 
 export interface IStringResponse {
+    data: string | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: string | null;
 }
 
 export class StringStringKeyValuePair implements IStringStringKeyValuePair {
-    readonly key!: string | null;
-    readonly value!: string | null;
+    key!: string | null;
+    value!: string | null;
 
     constructor(data?: IStringStringKeyValuePair) {
         if (data) {
@@ -4679,8 +6625,8 @@ export class StringStringKeyValuePair implements IStringStringKeyValuePair {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).key = _data["key"] !== undefined ? _data["key"] : <any>null;
-            (<any>this).value = _data["value"] !== undefined ? _data["value"] : <any>null;
+            this.key = _data["key"] !== undefined ? _data["key"] : <any>null;
+            this.value = _data["value"] !== undefined ? _data["value"] : <any>null;
         }
     }
 
@@ -4705,9 +6651,10 @@ export interface IStringStringKeyValuePair {
 }
 
 export class StringStringKeyValuePairListResponse implements IStringStringKeyValuePairListResponse {
+    data!: StringStringKeyValuePair[] | null;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: StringStringKeyValuePair[] | null;
 
     constructor(data?: IStringStringKeyValuePairListResponse) {
         if (data) {
@@ -4720,8 +6667,6 @@ export class StringStringKeyValuePairListResponse implements IStringStringKeyVal
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
                 for (let item of _data["data"])
@@ -4730,6 +6675,9 @@ export class StringStringKeyValuePairListResponse implements IStringStringKeyVal
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4742,28 +6690,28 @@ export class StringStringKeyValuePairListResponse implements IStringStringKeyVal
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         if (Array.isArray(this.data)) {
             data["data"] = [];
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IStringStringKeyValuePairListResponse {
+    data: StringStringKeyValuePair[] | null;
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: StringStringKeyValuePair[] | null;
 }
 
 export class Visit implements IVisit {
-    id!: number;
-    name!: string | null;
-    visitTypeId!: number;
-    visitDate!: Date;
+    appointmentTypeId!: number;
+    appointmentDate!: Date;
     foodMedicationAllergies!: string | null;
     typeOfAllergies!: string | null;
     smokes!: boolean;
@@ -4774,8 +6722,11 @@ export class Visit implements IVisit {
     lastFluShotDate!: Date | null;
     lastPneumoShotDate!: Date | null;
     additionalInfo!: string | null;
-    visitType!: VisitType;
+    appointmentType!: AppointmentType;
+    active!: boolean;
     patientId!: number;
+    id!: number;
+    name!: string | null;
 
     constructor(data?: IVisit) {
         if (data) {
@@ -4788,10 +6739,8 @@ export class Visit implements IVisit {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.visitTypeId = _data["visitTypeId"] !== undefined ? _data["visitTypeId"] : <any>null;
-            this.visitDate = _data["visitDate"] ? new Date(_data["visitDate"].toString()) : <any>null;
+            this.appointmentTypeId = _data["appointmentTypeId"] !== undefined ? _data["appointmentTypeId"] : <any>null;
+            this.appointmentDate = _data["appointmentDate"] ? new Date(_data["appointmentDate"].toString()) : <any>null;
             this.foodMedicationAllergies = _data["foodMedicationAllergies"] !== undefined ? _data["foodMedicationAllergies"] : <any>null;
             this.typeOfAllergies = _data["typeOfAllergies"] !== undefined ? _data["typeOfAllergies"] : <any>null;
             this.smokes = _data["smokes"] !== undefined ? _data["smokes"] : <any>null;
@@ -4802,8 +6751,11 @@ export class Visit implements IVisit {
             this.lastFluShotDate = _data["lastFluShotDate"] ? new Date(_data["lastFluShotDate"].toString()) : <any>null;
             this.lastPneumoShotDate = _data["lastPneumoShotDate"] ? new Date(_data["lastPneumoShotDate"].toString()) : <any>null;
             this.additionalInfo = _data["additionalInfo"] !== undefined ? _data["additionalInfo"] : <any>null;
-            this.visitType = _data["visitType"] ? VisitType.fromJS(_data["visitType"]) : <any>null;
+            this.appointmentType = _data["appointmentType"] ? AppointmentType.fromJS(_data["appointmentType"]) : <any>null;
+            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
             this.patientId = _data["patientId"] !== undefined ? _data["patientId"] : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
         }
     }
 
@@ -4816,10 +6768,8 @@ export class Visit implements IVisit {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["visitTypeId"] = this.visitTypeId !== undefined ? this.visitTypeId : <any>null;
-        data["visitDate"] = this.visitDate ? this.visitDate.toISOString() : <any>null;
+        data["appointmentTypeId"] = this.appointmentTypeId !== undefined ? this.appointmentTypeId : <any>null;
+        data["appointmentDate"] = this.appointmentDate ? this.appointmentDate.toISOString() : <any>null;
         data["foodMedicationAllergies"] = this.foodMedicationAllergies !== undefined ? this.foodMedicationAllergies : <any>null;
         data["typeOfAllergies"] = this.typeOfAllergies !== undefined ? this.typeOfAllergies : <any>null;
         data["smokes"] = this.smokes !== undefined ? this.smokes : <any>null;
@@ -4830,17 +6780,18 @@ export class Visit implements IVisit {
         data["lastFluShotDate"] = this.lastFluShotDate ? this.lastFluShotDate.toISOString() : <any>null;
         data["lastPneumoShotDate"] = this.lastPneumoShotDate ? this.lastPneumoShotDate.toISOString() : <any>null;
         data["additionalInfo"] = this.additionalInfo !== undefined ? this.additionalInfo : <any>null;
-        data["visitType"] = this.visitType ? this.visitType.toJSON() : <any>null;
+        data["appointmentType"] = this.appointmentType ? this.appointmentType.toJSON() : <any>null;
+        data["active"] = this.active !== undefined ? this.active : <any>null;
         data["patientId"] = this.patientId !== undefined ? this.patientId : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
         return data;
     }
 }
 
 export interface IVisit {
-    id: number;
-    name: string | null;
-    visitTypeId: number;
-    visitDate: Date;
+    appointmentTypeId: number;
+    appointmentDate: Date;
     foodMedicationAllergies: string | null;
     typeOfAllergies: string | null;
     smokes: boolean;
@@ -4851,18 +6802,22 @@ export interface IVisit {
     lastFluShotDate: Date | null;
     lastPneumoShotDate: Date | null;
     additionalInfo: string | null;
-    visitType: VisitType;
+    appointmentType: AppointmentType;
+    active: boolean;
     patientId: number;
+    id: number;
+    name: string | null;
 }
 
 export class VisitPagedResponse implements IVisitPagedResponse {
-    status!: string | null;
-    message!: string | null;
     currentPage!: number;
     pageCount!: number;
     pageSize!: number;
     rowCount!: number;
     data!: Visit[] | null;
+    code!: string | null;
+    status!: string | null;
+    message!: string | null;
 
     constructor(data?: IVisitPagedResponse) {
         if (data) {
@@ -4875,8 +6830,6 @@ export class VisitPagedResponse implements IVisitPagedResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
             this.currentPage = _data["currentPage"] !== undefined ? _data["currentPage"] : <any>null;
             this.pageCount = _data["pageCount"] !== undefined ? _data["pageCount"] : <any>null;
             this.pageSize = _data["pageSize"] !== undefined ? _data["pageSize"] : <any>null;
@@ -4889,6 +6842,9 @@ export class VisitPagedResponse implements IVisitPagedResponse {
             else {
                 this.data = <any>null;
             }
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
         }
     }
 
@@ -4901,8 +6857,6 @@ export class VisitPagedResponse implements IVisitPagedResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
         data["currentPage"] = this.currentPage !== undefined ? this.currentPage : <any>null;
         data["pageCount"] = this.pageCount !== undefined ? this.pageCount : <any>null;
         data["pageSize"] = this.pageSize !== undefined ? this.pageSize : <any>null;
@@ -4912,24 +6866,29 @@ export class VisitPagedResponse implements IVisitPagedResponse {
             for (let item of this.data)
                 data["data"].push(item.toJSON());
         }
+        data["code"] = this.code !== undefined ? this.code : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["message"] = this.message !== undefined ? this.message : <any>null;
         return data;
     }
 }
 
 export interface IVisitPagedResponse {
-    status: string | null;
-    message: string | null;
     currentPage: number;
     pageCount: number;
     pageSize: number;
     rowCount: number;
     data: Visit[] | null;
+    code: string | null;
+    status: string | null;
+    message: string | null;
 }
 
 export class VisitResponse implements IVisitResponse {
+    data!: Visit;
+    code!: string | null;
     status!: string | null;
     message!: string | null;
-    data!: Visit;
 
     constructor(data?: IVisitResponse) {
         if (data) {
@@ -4942,9 +6901,10 @@ export class VisitResponse implements IVisitResponse {
 
     init(_data?: any) {
         if (_data) {
+            this.data = _data["data"] ? Visit.fromJS(_data["data"]) : <any>null;
+            this.code = _data["code"] !== undefined ? _data["code"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            this.data = _data["data"] ? Visit.fromJS(_data["data"]) : <any>null;
         }
     }
 
@@ -4957,116 +6917,19 @@ export class VisitResponse implements IVisitResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>null;
+        data["code"] = this.code !== undefined ? this.code : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["message"] = this.message !== undefined ? this.message : <any>null;
-        data["data"] = this.data ? this.data.toJSON() : <any>null;
         return data;
     }
 }
 
 export interface IVisitResponse {
-    status: string | null;
-    message: string | null;
     data: Visit;
-}
-
-export class VisitType implements IVisitType {
-    id!: number;
-    name!: string | null;
-    active!: boolean;
-
-    constructor(data?: IVisitType) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-            this.active = _data["active"] !== undefined ? _data["active"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): VisitType {
-        data = typeof data === 'object' ? data : {};
-        let result = new VisitType();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        data["active"] = this.active !== undefined ? this.active : <any>null;
-        return data;
-    }
-}
-
-export interface IVisitType {
-    id: number;
-    name: string | null;
-    active: boolean;
-}
-
-export class VisitTypeArrayResponse implements IVisitTypeArrayResponse {
-    status!: string | null;
-    message!: string | null;
-    data!: VisitType[] | null;
-
-    constructor(data?: IVisitTypeArrayResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
-            this.message = _data["message"] !== undefined ? _data["message"] : <any>null;
-            if (Array.isArray(_data["data"])) {
-                this.data = [] as any;
-                for (let item of _data["data"])
-                    this.data!.push(VisitType.fromJS(item));
-            }
-            else {
-                this.data = <any>null;
-            }
-        }
-    }
-
-    static fromJS(data: any): VisitTypeArrayResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new VisitTypeArrayResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["status"] = this.status !== undefined ? this.status : <any>null;
-        data["message"] = this.message !== undefined ? this.message : <any>null;
-        if (Array.isArray(this.data)) {
-            data["data"] = [];
-            for (let item of this.data)
-                data["data"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IVisitTypeArrayResponse {
+    code: string | null;
     status: string | null;
     message: string | null;
-    data: VisitType[] | null;
 }
 
 export class WeatherForecast implements IWeatherForecast {

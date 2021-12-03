@@ -1,19 +1,5 @@
 import DateFnsUtils from '@date-io/date-fns';
-import {
-    Backdrop,
-    Card,
-    CardContent,
-    CircularProgress,
-    Collapse,
-    Grid,
-    IconButton,
-    InputLabel,
-    makeStyles,
-    MenuItem,
-    Select,
-    TextField as MuiTextField,
-    Theme,
-} from '@material-ui/core';
+import { Backdrop, Card, CardContent, CircularProgress, Collapse, Grid, IconButton, InputLabel, makeStyles, MenuItem, TextField as MuiTextField, Select, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { green } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Close as CloseIcon } from '@material-ui/icons';
-import { Alert as MuiAlert, Autocomplete } from '@material-ui/lab';
+import { Autocomplete, Alert as MuiAlert } from '@material-ui/lab';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { spacing } from '@material-ui/system';
 import { Formik } from 'formik';
@@ -31,13 +17,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import * as Yup from 'yup';
 
-import {
-    DiaRegWebApiClient as Client,
-    Visit,
-    VisitResponse,
-    VisitType,
-    VisitTypeArrayResponse,
-} from '../../../api/DiaRegApi';
+import { AppointmentType, AppointmentTypeArrayResponse, DiaRegWebApiClient as Client, Visit, VisitResponse } from '../../../api/DiaRegApi';
 import CloseDialogButton from '../../../components/dialogs/CloseDialogButton';
 import Response from '../../../models/Response';
 
@@ -105,7 +85,7 @@ const validationSchema = Yup.object().shape({
 
 export function VisitEditor(props: VisitPropsType) {
     const [visit, setVisit] = React.useState<Visit>(createNewVisit());
-    const [visitTypes, setVisitTypes] = React.useState<VisitType[]>([]);
+    const [visitTypes, setVisitTypes] = React.useState<AppointmentType[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [dataChanged, setDataChanged] = React.useState<boolean>(false);
     const [openAlert, setOpenAlert] = React.useState<boolean>(false);
@@ -125,7 +105,7 @@ export function VisitEditor(props: VisitPropsType) {
 
         if (loading) {
             (async () => {
-                await getVisitTypes().then((value: VisitTypeArrayResponse) => {
+                await getVisitTypes().then((value: AppointmentTypeArrayResponse) => {
                     if (value.status == "success") {
                         let data = value.data!;
                         setVisitTypes(data);
@@ -177,18 +157,18 @@ export function VisitEditor(props: VisitPropsType) {
     }
 
     async function getVisitTypes() {
-        return await new Client().getVisitTypes();
+        return await new Client().getAppointmentTypes();
     }
 
     function createNewVisit(): Visit {
         let newVisit = new Visit();
         newVisit.id = 0;
-        newVisit.visitDate = new Date();
+        newVisit.appointmentDate = new Date();
         newVisit.patientId = props.patientId;
         newVisit.lastFluShotDate = null as any;
         newVisit.lastPneumoShotDate = null as any;
-        newVisit.visitType = new VisitType();
-        newVisit.visitTypeId = 0;
+        newVisit.appointmentType = new AppointmentType();
+        newVisit.appointmentTypeId = 0;
         newVisit.smokes = false;
         newVisit.smokesPacksPerDay = 0;
         newVisit.drinksAlcohol = false;
@@ -353,8 +333,8 @@ export function VisitEditor(props: VisitPropsType) {
                                                         autoComplete={false}
 
                                                         onChange={(event: any, newValue: any) => {
-                                                            values.visitType = newValue;
-                                                            values.visitTypeId = newValue.id;
+                                                            values.appointmentType = newValue;
+                                                            values.appointmentTypeId = newValue.id;
                                                             setVisit(values);
                                                             handleChange("visitType");
                                                             setManualDirty(true);
@@ -363,10 +343,10 @@ export function VisitEditor(props: VisitPropsType) {
                                                             setVisitTypeName(newInputValue);
                                                         }}
                                                         inputValue={visitTypeName}
-                                                        value={visit.visitType}
-                                                        renderInput={(params) => <TextField required {...params} label="Purpose of Visit" error={Boolean(touched.visitType && errors.visitType)}
+                                                        value={visit.appointmentType}
+                                                        renderInput={(params) => <TextField required {...params} label="Purpose of Visit" error={Boolean(touched.appointmentType && errors.appointmentType)}
                                                             fullWidth
-                                                            helperText={touched.visitType && errors.visitType}
+                                                            helperText={touched.appointmentType && errors.appointmentType}
                                                             name="visitTypeField"
                                                             variant="outlined"
 
@@ -388,18 +368,18 @@ export function VisitEditor(props: VisitPropsType) {
                                                             inputVariant="outlined"
                                                             label="Date of Visit"
                                                             format="MM/dd/yyyy"
-                                                            value={values.visitDate}
+                                                            value={values.appointmentDate}
                                                             InputAdornmentProps={{ position: "start" }}
                                                             onChange={date => {
 
-                                                                values.visitDate = date!;
+                                                                values.appointmentDate = date!;
                                                                 setVisit(values);
 
                                                             }}
                                                             maxDate={new Date()}
-                                                            error={Boolean(touched.visitDate && errors.visitDate)}
+                                                            error={Boolean(touched.appointmentDate && errors.appointmentDate)}
                                                             onBlur={handleBlur}
-                                                            helperText={errors.visitDate && touched.visitDate}
+                                                            helperText={errors.appointmentDate && touched.appointmentDate}
 
                                                         />
 

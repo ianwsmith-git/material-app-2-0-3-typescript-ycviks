@@ -1,11 +1,11 @@
-import { Button, CardContent, Card as MuiCard, styled, StyledComponentProps, TableCell, TableRow } from '@material-ui/core';
+import { Button, CardContent, Checkbox, Card as MuiCard, styled } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import { fontWeight, spacing } from '@material-ui/system';
+import { spacing } from '@material-ui/system';
 import _ from 'lodash';
 import React from 'react';
 
@@ -63,25 +63,78 @@ export type Column = {
 
 
 type BasicTablePropTypes = {
-    //HeadCells: HeadCell[];
     columns: Column[];
     data: Array<any>;
     allowEdit: boolean | false;
     allowDelete: boolean | false;
-    viewItemHandler: (index: any) => any;
-    deleteHandler?: (index: any) => any;
-
+    allowSelect?: boolean | false;
+    allowSelectAll?: boolean | false;
+    allowMultiSelect?: boolean | false;
+    onView: (index: any) => any;
+    onDelete?: (index: any) => any;
+    onSelectionChange?: (indexes: Array<number>) => any;
 };
 
 function BasicTable(props: BasicTablePropTypes) {
 
+    //#region Control State
+    const [selections, setSelections] = React.useState<Array<number>>([]);
+    //#endregion Control State
+
+    //#region Event Handlers
     function handleView(index: any) {
-        props.viewItemHandler(index);
+        props.onView(index);
     }
 
     function handleDelete(index: number) {
-        props.deleteHandler!(index);
+        props.onDelete!(index);
     }
+
+    function handleSelectAll(event: any) {
+        if (event.target.checked) {
+            const newSelected = props.data.map((item: any, index: number) => index);
+            setSelections(newSelected);
+        }
+        else {
+            setSelections([]);
+        }
+
+        props.onSelectionChange!(selections);
+    }
+
+    function handleSelect(index: number) {
+
+        let newSelected = new Array<number>();
+
+        if (props.allowMultiSelect) {
+
+            if (index === -1) {
+                newSelected = newSelected.concat(selections, index);
+            } else if (index === 0) {
+                newSelected = newSelected.concat(selections.slice(1));
+            } else if (index === selections.length - 1) {
+                newSelected = newSelected.concat(selections.slice(0, -1));
+            } else if (index > 0) {
+                newSelected = newSelected.concat(
+                    selections.slice(0, index),
+                    selections.slice(index + 1),
+                );
+            }
+
+            setSelections(newSelected);
+        }
+        else {
+            newSelected.push(index);
+            setSelections(newSelected);
+        }
+
+        props.onSelectionChange!(newSelected);
+    }
+
+    function isItemSelected(index: number): boolean {
+        return selections.indexOf(index) !== -1;
+    }
+    //#endregion Event Hanlders
 
     const classes = useStyles();
 
@@ -97,6 +150,27 @@ function BasicTable(props: BasicTablePropTypes) {
                                 <Table stickyHeader aria-label="customized table" className={classes.table}  >
                                     <TableHead >
                                         <StyledTableRow key={-1}>
+                                            {
+                                                props.allowSelect ?
+                                                    <StyledTableCell padding="checkbox">
+
+                                                        {props.allowSelectAll ?
+                                                            <Checkbox
+                                                                color="primary"
+                                                                indeterminate={selections.length > 0 && selections.length < props.data.length}
+                                                                checked={props.data.length > 0 && selections.length === props.data.length}
+                                                                onChange={handleSelectAll}
+                                                                inputProps={{
+                                                                    'aria-label': 'select all desserts',
+                                                                }}
+                                                            />
+                                                            :
+                                                            null
+                                                        }
+                                                    </StyledTableCell>
+                                                    :
+                                                    null
+                                            }
 
                                             {
                                                 props.allowEdit ?
@@ -112,8 +186,6 @@ function BasicTable(props: BasicTablePropTypes) {
                                                     null
                                             }
 
-
-
                                             {
                                                 props.columns.map((column) => (
                                                     <StyledTableCell align="left" padding="default">{column.header}</StyledTableCell>
@@ -126,7 +198,29 @@ function BasicTable(props: BasicTablePropTypes) {
 
                                             props.data.map((row, index) => (
 
-                                                <StyledTableRow key={index}>
+                                                <StyledTableRow key={index}
+                                                    hover
+                                                    onClick={(event) => handleSelect(index)}
+                                                    role="checkbox"
+                                                    aria-checked={isItemSelected(index)}
+                                                    tabIndex={-1}
+                                                    selected={isItemSelected(index)}
+                                                >
+
+                                                    {
+                                                        props.allowSelect ?
+                                                            <StyledTableCell padding="checkbox">
+                                                                <Checkbox
+                                                                    color="primary"
+                                                                    checked={isItemSelected(index)}
+                                                                    inputProps={{
+                                                                        'aria-labelledby': index.toString(),
+                                                                    }}
+                                                                />
+                                                            </StyledTableCell>
+                                                            :
+                                                            null
+                                                    }
 
                                                     {
                                                         props.allowEdit ?
@@ -162,7 +256,7 @@ function BasicTable(props: BasicTablePropTypes) {
                     </Card>
                 </Paper>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 

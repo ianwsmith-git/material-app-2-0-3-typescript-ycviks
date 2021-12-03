@@ -57,8 +57,8 @@ const moreStyles = (theme: Theme) => createStyles(
     });
 
 type ContactPropsType = {
-    contactId: number;
-    patientId: number;
+    contactId: string;
+    patientId: string;
     parentAlertHandler: Function;
     onClose: (refreshRequired: boolean) => any;
 };
@@ -86,7 +86,8 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
 
 
     public addContact = async (contact: Contact) => {
-        contact.patientId = this.props.patientId;
+        // TODO Fix
+        //contact.patientId = this.props.patientId;
         return await new Client().addContact(contact)
     }
 
@@ -96,8 +97,9 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
 
     public createNewContact = async () => {
         let newContact = new Contact();
-        newContact.id = 0;
-        newContact.patientId = this.props.patientId;
+        //newContact.id = 0;
+        //TODO Fix Create New
+        //newContact.patientId = this.props.patientId;
         newContact.contactTypeId = 0;
 
         await this.getRegions();
@@ -110,7 +112,7 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
         this.setState({ contact: newContact });
     }
 
-    public getCities = async (regionId: number) => {
+    public getCities = async (regionId: string) => {
         return await new Client().getCities(regionId).then((value) => {
             this.setState({ cities: value.data });
         });
@@ -118,33 +120,33 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
 
     public getContact = async () => {
         try {
-            if (this.state.contactId !== 0) {
-                await new Client().getContact(this.props.contactId).then(async (value) => {
-                    if (value.status === "success") {
-                        let data = value.data! as Contact;
-                        data.address2 = data.address2 ?? "";
-                        data.otherContact = data.otherContact ?? "";
-
-                        await this.getRegions();
-                        await this.getCities(this.state.regions[0].id!);
-                        await this.getContactTypes();
-                        data.location = this.getLocation(this.state.regions[0], this.state.cities[0])
-                        data.contactType = this.state.ContactTypes[0];
-
-                        this.setState({ open: true, contact: data });
-                    }
-                    else {
-                        this.showParentAlert("error", value.message!);
-                    }
-
-                });
-            }
-            else {
-                this.createNewContact();
-                this.setState({ open: true });
-            }
+            /*  if (this.state.contactId !== 0) {
+                 await new Client().getContact(this.props.contactId).then(async (value) => {
+                     if (value.status === "success") {
+                         let data = value.data! as Contact;
+                         data.address2 = data.address2 ?? "";
+                         data.otherContact = data.otherContact ?? "";
+ 
+                         await this.getRegions();
+                         await this.getCities(this.state.regions[0].id!);
+                         await this.getContactTypes();
+                         data.location = this.getLocation(this.state.regions[0], this.state.cities[0])
+                         data.contactType = this.state.ContactTypes[0];
+ 
+                         this.setState({ open: true, contact: data });
+                     }
+                     else {
+                         this.showParentAlert("error", value.message!);
+                     }
+ 
+                 });
+             }
+             else {
+                 this.createNewContact();
+                 this.setState({ open: true });
+             } */
         }
-        catch (error) {
+        catch (error: any) {
             this.showParentAlert("error", "An expected error has occurred: " + error.message!);
         }
     }
@@ -196,7 +198,8 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
 
             let responseInfo: Response<number>;
 
-            if (values.id !== 0) {
+            // TODO Fix
+            if (true) {
                 var response = await this.updateContact(values);
                 responseInfo = response as Response<number>;
             }
@@ -206,9 +209,9 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
             }
 
             if (responseInfo.status === "success") {
-                if (values.id === 0) {
-                    values.id = responseInfo.data!;
-                }
+                /*  if (values.id === 0) {
+                     values.id = responseInfo.data!;
+                 } */
 
                 this.setState({ contact: values });
                 this.setState({ dataChanged: true });
@@ -224,7 +227,7 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
                 setSubmitting(false);
             }
 
-        } catch (error) {
+        } catch (error: any) {
             this.showAlert("error", error.message);
             setStatus({ sent: false });
             setErrors({ submit: error.message });
@@ -268,7 +271,9 @@ class ContactBaseDialog extends React.Component<ContactPropsType & StyledCompone
 
         return (
             <div>
-                {this.state.contactId === 0 ?
+
+                //TODO Fix this check for new item
+                {true ?
                     <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
                         New Contact
                     </Button>

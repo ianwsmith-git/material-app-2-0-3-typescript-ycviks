@@ -1,13 +1,4 @@
-import {
-    Button as MuiButton,
-    Collapse,
-    createStyles,
-    Divider as MuiDivider,
-    Grid,
-    IconButton,
-    StyledComponentProps,
-    Typography,
-} from '@material-ui/core';
+import { Collapse, createStyles, Grid, IconButton, Button as MuiButton, Divider as MuiDivider, StyledComponentProps, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
 import { Alert as MuiAlert } from '@material-ui/lab';
@@ -114,8 +105,8 @@ function VisitsTable(props: VisitsTablePropsType & StyledComponentProps) {
                     const newRows = response.data?.map((visit) => {
                         return {
                             id: visit.id,
-                            date: (new Date(moment.utc(visit.visitDate!).format("MM/DD/YYYY"))).toLocaleDateString(),
-                            type: visit.visitType?.name
+                            date: (new Date(moment.utc(visit.appointmentDate!).format("MM/DD/YYYY"))).toLocaleDateString(),
+                            type: visit.appointmentType?.name
                         };
                     }) as Array<VisitType>;
 
@@ -185,7 +176,7 @@ function VisitsTable(props: VisitsTablePropsType & StyledComponentProps) {
 
                 </ Collapse>
             </Grid>
-            <BasicTable columns={buildColumns()} data={rows} allowEdit={true} allowDelete={false} viewItemHandler={viewRecord} />
+            <BasicTable columns={buildColumns()} data={rows} allowEdit={true} allowDelete={false} onView={viewRecord} />
 
             {showEditor ?
                 <VisitEditor open={showEditor} visitId={selectedVisitId} patientId={props.patientId} onClose={onDataChange} parentAlertHandler={() => { }} />

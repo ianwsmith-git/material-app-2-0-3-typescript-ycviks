@@ -175,7 +175,7 @@ export default function Doctors() {
                     {alertMessage}
                 </Alert>
             </Collapse>
-            <ListPage title="Doctors" data={rows} columns={columns} allowDelete={false} allowEdit={true} rowCount={rowCount} allowPaging={true} pagingHandler={handlePageChange} filterHander={handleFilter} onView={handleView} />
+            <ListPage title="Patient Appointments" data={rows} columns={columns} allowDelete={false} allowEdit={true} rowCount={rowCount} allowPaging={true} pagingHandler={handlePageChange} filterHander={handleFilter} onView={handleView} />
 
         </React.Fragment>
     );

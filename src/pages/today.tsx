@@ -1,15 +1,13 @@
 import React from "react";
-
 import { Helmet } from "react-helmet";
 
-
-function Appointments() {
+function Today() {
     return (
         <React.Fragment>
-            <Helmet title="Appointments" />
-            <label>Appointments</label>
+            <Helmet title="Today" />
+            <label>Today</label>
         </React.Fragment>
     );
 }
 
-export default Appointments;
+export default Today;

@@ -69,8 +69,8 @@ function createNewPersonAddress(personId) {
     var newPersonAddress = new DiaRegApi_1.PersonAddress();
     newPersonAddress.active = true;
     newPersonAddress.location = new DiaRegApi_2.Location();
-    newPersonAddress.location.city = new DiaRegApi_1.City({ id: 0, name: "", active: true, regionId: 0 });
-    newPersonAddress.location.region = new DiaRegApi_1.Region({ id: 0, name: "", active: true, countryId: 0 });
+    newPersonAddress.location.city = new DiaRegApi_1.City({ id: 0, name: "", active: true, regionId: 0, auditInfo: new DiaRegApi_2.AuditInfo() });
+    newPersonAddress.location.region = new DiaRegApi_1.Region({ id: 0, name: "", active: true, countryId: 0, auditInfo: new DiaRegApi_2.AuditInfo() });
     newPersonAddress.personId = personId;
     newPersonAddress.id = 0;
     newPersonAddress.type = new DiaRegApi_1.AddressType();
@@ -253,7 +253,7 @@ function Locations(props) {
                                 e.preventDefault();
                             } },
                             react_1["default"].createElement(icons_1.Close, { fontSize: "inherit" })) }, alertMessage)))),
-        react_1["default"].createElement(BasicTable_1["default"], { columns: buildColumns(), data: addresses, allowEdit: true, allowDelete: true, viewItemHandler: showAddress, deleteHandler: onDeleteAddress }),
+        react_1["default"].createElement(BasicTable_1["default"], { columns: buildColumns(), data: addresses, allowEdit: true, allowDelete: true, onView: showAddress, onDelete: onDeleteAddress }),
         showEditor ?
             react_1["default"].createElement(LocationEditor_1["default"], { open: showEditor, personId: props.personId, address: selectedAddress, onClose: onDataChange })
             :

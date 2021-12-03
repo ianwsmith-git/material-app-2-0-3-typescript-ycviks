@@ -187,6 +187,6 @@ function Patients() {
                         e.preventDefault();
                     } },
                     react_1["default"].createElement(icons_1.Close, { fontSize: "inherit" })) }, alertMessage)),
-        react_1["default"].createElement(ListPage_1["default"], { title: "Patients", data: rows, columns: columns, allowDelete: false, allowEdit: true, rowCount: rowCount, allowPaging: true, pagingHandler: handlePageChange, filterHander: handleFilter, viewItemHandler: handleView })));
+        react_1["default"].createElement(ListPage_1["default"], { title: "Patients", data: rows, columns: columns, allowDelete: false, allowEdit: true, rowCount: rowCount, allowPaging: true, pagingHandler: handlePageChange, filterHander: handleFilter, onView: handleView })));
 }
 exports["default"] = Patients;

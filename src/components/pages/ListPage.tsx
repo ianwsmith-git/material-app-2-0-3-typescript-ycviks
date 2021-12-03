@@ -42,7 +42,7 @@ type ListPagePropTypes = {
     allowPaging: boolean | false;
     pagingHandler: (page: number, pageSize: number) => any;
     filterHander: (filter: any) => any;
-    viewItemHandler: (id: any) => any;
+    onView: (id: any) => any;
 };
 
 const defaultSearch = new ListSearch({
